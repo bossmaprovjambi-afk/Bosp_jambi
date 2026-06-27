@@ -9,41 +9,41 @@
   <script>tailwind.config = { darkMode: 'class' }</script>
 
   <style>
-/* PALET WARNA SAGE GREEN BARU */
-body { background-color: #DDEBD2; } /* Mint */
-.card { border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); background-color: #A3BFA3; } /* Sage Muda */
+/* PALET WARNA NAVY + PUTIH BARU */
+body { background-color: #F8F9FA; } /* Abu-abu putih super muda */
+.card { border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); background-color: #FFFFFF; border: 1px solid #E2DCC5; } /* Card Putih + Border Krem */
 .bulan-icon { font-size: 14px; text-align: center; width: 24px; }
 
-.btn-sage { background-color: #4A6F5A; color: #DDEBD2; font-weight: 600; }
-.btn-sage:hover { background-color: #6E9B7F; }
+.btn-navy { background-color: #1E293B; color: #FFFFFF; font-weight: 600; transition: all 0.2s; }
+.btn-navy:hover { background-color: #334155; }
 
-.thead-sage { background-color: #4A6F5A; color: #DDEBD2; }
+.thead-navy { background-color: #1E293B; color: #FFFFFF; }
 
-.text-sage { color: #4A6F5A; }
-.border-sage { border-color: #A3BFA3; }
+.text-navy { color: #1E293B; }
+.border-slate { border-color: #94A3B8; }
 
-  #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #4A6F5A; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.6s ease-out; }
+  #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #1E293B; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.6s ease-out; }
   #loading-screen img { width: 140px; animation: pulse-glow 1.8s infinite ease-in-out; }
-  @keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #6E9B7F); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #6E9B7F); } }
+  @keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #94A3B8); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #94A3B8); } }
   ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-thumb { background-color: #6E9B7F; border-radius: 10px; }
-    * { scrollbar-width: thin; scrollbar-color: #6E9B7F #A3BFA3; }
+  ::-webkit-scrollbar-thumb { background-color: #94A3B8; border-radius: 10px; }
+    * { scrollbar-width: thin; scrollbar-color: #94A3B8 #E2DCC5; }
   </style>
 </head>
 
-<body class="p-4 md:p-8 text-sage transition-colors duration-300">
+<body class="p-4 md:p-8 text-navy transition-colors duration-300">
   <div id="loading-screen"><img src="./logo-jambi.png" alt="Loading Sepucuk Jambi..."></div>
 
   <div class="max-w-[1600px] mx-auto">
     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
       <div class="flex items-center gap-4 text-center md:text-left">
-        <img src="./logo-jambi.png" alt="Logo Sepucuk Jambi" class="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg rounded-lg">
+        <img src="./logo-jambi.png" alt="Logo Sepucuk Jambi" class="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg rounded-lg bg-white p-1">
         <div>
           <h1 class="text-2xl md:text-3xl font-bold">Dashboard Laporan BOSP Reguler SMA</h1>
-          <p class="text-lg md:text-xl font-semibold">Provinsi Jambi Tahun 2026</p>
-          <p class="text-sm opacity-70">Update terakhir: <span id="lastUpdate">Loading...</span></p>
-          <!-- TOMBOL TANPA ICON + WARNA SAGE -->
-          <a href="./rekap.html" class="mt-2 inline-block btn-sage px-4 py-2 rounded-lg text-sm">Lihat Rekap Kabupaten</a>
+          <p class="text-lg md:text-xl font-semibold text-slate-700">Provinsi Jambi Tahun 2026</p>
+          <p class="text-sm text-slate-500">Update terakhir: <span id="lastUpdate">Loading...</span></p>
+          <!-- TOMBOL NAVY TANPA ICON -->
+          <a href="./rekap.html" class="mt-2 inline-block btn-navy px-4 py-2 rounded-lg text-sm">Lihat Rekap Kabupaten</a>
         </div>
       </div>
       <button id="theme-toggle" class="p-3 rounded-full card shadow-md hover:scale-110 transition absolute top-4 right-4 md:static">
@@ -52,20 +52,20 @@ body { background-color: #DDEBD2; } /* Mint */
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <div class="card"><p class="opacity-70 text-sm">Total Sekolah</p><p id="total" class="text-4xl font-bold">0</p></div>
-      <div class="card"><p class="opacity-70 text-sm">Lengkap 12/12</p><p id="sudah" class="text-4xl font-bold text-green-800">0</p></div>
-      <div class="card"><p class="opacity-70 text-sm">Belum Lengkap</p><p id="belum" class="text-4xl font-bold text-red-700">0</p></div>
-      <div class="card"><p class="opacity-70 text-sm">% Selesai</p><p id="persen" class="text-4xl font-bold text-blue-900">0%</p></div>
+      <div class="card"><p class="text-slate-500 text-sm">Total Sekolah</p><p id="total" class="text-4xl font-bold">0</p></div>
+      <div class="card"><p class="text-slate-500 text-sm">Lengkap 12/12</p><p id="sudah" class="text-4xl font-bold text-green-700">0</p></div>
+      <div class="card"><p class="text-slate-500 text-sm">Belum Lengkap</p><p id="belum" class="text-4xl font-bold text-red-700">0</p></div>
+      <div class="card"><p class="text-slate-500 text-sm">% Selesai</p><p id="persen" class="text-4xl font-bold text-blue-800">0%</p></div>
     </div>
 
-    <div class="card mb-4"><input id="searchBox" type="text" placeholder="Cari NPSN, Nama Sekolah, atau Kabupaten..." class="w-full p-3 border rounded-lg bg-[#DDEBD2] border-sage placeholder-gray-600"></div>
+    <div class="card mb-4"><input id="searchBox" type="text" placeholder="Cari NPSN, Nama Sekolah, atau Kabupaten..." class="w-full p-3 border rounded-lg bg-white border-slate placeholder-slate-400"></div>
 
     <div class="card overflow-x-auto max-h-[calc(100vh-340px)] overflow-y-auto my-2">
-      <table class="w-full text-sm"><thead><tr class="text-left thead-sage border-b border-sage">
+      <table class="w-full text-sm"><thead><tr class="text-left thead-navy border-b border-slate">
         <th class="p-3">No</th><th class="p-3">NPSN</th><th class="p-3">Nama Sekolah</th><th class="p-3">Status</th><th class="p-3">Kabupaten</th>
         <th class="p-3 text-center" title="Januari">J</th><th class="p-3 text-center" title="Februari">F</th><th class="p-3 text-center" title="Maret">M</th><th class="p-3 text-center" title="April">A</th><th class="p-3 text-center" title="Mei">M</th><th class="p-3 text-center" title="Juni">J</th><th class="p-3 text-center" title="Juli">J</th><th class="p-3 text-center" title="Agustus">A</th><th class="p-3 text-center" title="September">S</th><th class="p-3 text-center" title="Oktober">O</th><th class="p-3 text-center" title="Nopember">N</th><th class="p-3 text-center" title="Desember">D</th>
         <th class="p-3">STATUS</th><th class="p-3">WA</th>
-      </tr></thead><tbody id="tabelBody"><tr><td colspan="19" class="p-6 text-center opacity-50">Loading...</td></tr></tbody></table>
+      </tr></thead><tbody id="tabelBody"><tr><td colspan="19" class="p-6 text-center text-slate-400">Loading...</td></tr></tbody></table>
     </div>
   </div>
 
@@ -74,8 +74,8 @@ body { background-color: #DDEBD2; } /* Mint */
   let semuaData = []; const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','Nopember','Desember'];
 
   const themeToggleBtn = document.getElementById('theme-toggle'); const themeIcon = document.getElementById('theme-icon'); const html = document.documentElement;
-  if (localStorage.getItem('theme') === 'dark') { html.classList.add('dark'); themeIcon.textContent = '☀️'; document.body.style.backgroundColor = '#2d3a2e'; } else { themeIcon.textContent = '🌙'; document.body.style.backgroundColor = '#DDEBD2'; }
-  themeToggleBtn.addEventListener('click', () => { html.classList.toggle('dark'); if (html.classList.contains('dark')) { localStorage.setItem('theme', 'dark'); themeIcon.textContent = '☀️'; document.body.style.backgroundColor = '#2d3a2e'; } else { localStorage.setItem('theme', 'light'); themeIcon.textContent = '🌙'; document.body.style.backgroundColor = '#DDEBD2'; } });
+  if (localStorage.getItem('theme') === 'dark') { html.classList.add('dark'); themeIcon.textContent = '☀️'; document.body.style.backgroundColor = '#0F172A'; document.querySelectorAll('.card').forEach(c => c.style.backgroundColor = '#1E293B'); } else { themeIcon.textContent = '🌙'; document.body.style.backgroundColor = '#F8F9FA'; document.querySelectorAll('.card').forEach(c => c.style.backgroundColor = '#FFFFFF'); }
+  themeToggleBtn.addEventListener('click', () => { html.classList.toggle('dark'); if (html.classList.contains('dark')) { localStorage.setItem('theme', 'dark'); themeIcon.textContent = '☀️'; document.body.style.backgroundColor = '#0F172A'; document.querySelectorAll('.card').forEach(c => c.style.backgroundColor = '#1E293B'); } else { localStorage.setItem('theme', 'light'); themeIcon.textContent = '🌙'; document.body.style.backgroundColor = '#F8F9FA'; document.querySelectorAll('.card').forEach(c => c.style.backgroundColor = '#FFFFFF'); } });
 
   function parseCSV(text) {
     const lines = text.trim().split('\n');
@@ -104,9 +104,9 @@ body { background-color: #DDEBD2; } /* Mint */
         const val = get(row, b).toUpperCase().trim();
         if(val === 'TRUE' || val === '1' || val.includes('SUDAH')) {
           sudahBulan++;
-          return `<td class="bulan-icon text-green-800" title="${b}: SUDAH KIRIM">✅</td>`;
+          return `<td class="bulan-icon text-green-700" title="${b}: SUDAH KIRIM">✅</td>`;
         } else {
-          return `<td class="bulan-icon opacity-40" title="${b}: BELUM KIRIM">⏳</td>`;
+          return `<td class="bulan-icon text-slate-300" title="${b}: BELUM KIRIM">⏳</td>`;
         }
       }).join('');
 
@@ -117,17 +117,17 @@ body { background-color: #DDEBD2; } /* Mint */
           return!(v==='TRUE'||v==='1'||v.includes('SUDAH'));
         });
 
-        let pesan = `Halo ${nama}, ini dari Dinas Pendidikan Provinsi Jambi.`;
+        let pesan = `Halo ${nama}, Saya Operator Helpdesk BOSP Reguler Bidang Pembinaan SMA Dinas Pendidikan Provinsi Jambi.`;
         if(bulanBelum.length > 0) {
           const listBulan = bulanBelum.join(', ');
-          pesan += `\n\nUntuk Laporan BOSP 2026, s/d bulan ${BULAN[bulanSekarangIndex-1]} masih ada yg belum Bapak/Ibu kirim ya: ${listBulan}.\n\nMohon segera dilengkapi agar tidak menghambat penyaluran dana. Terima kasih.`;
+          pesan += `\n\nUntuk Laporan BOSP 2026, s/d bulan ${BULAN[bulanSekarangIndex-1]} masih ada yg belum Bapak/Ibu kirim ya: ${listBulan}.\n\nMohon segera dilengkapi agar tidak menghambat Pelaporan BOSP Reguler Tahun 2026. Terima kasih.`;
         } else {
           pesan += `\n\nAlhamdulillah, Laporan BOSP 2026 Bapak/Ibu s/d bulan ${BULAN[bulanSekarangIndex-1]} sudah lengkap. Terima kasih.`;
         }
         waLink = `https://wa.me/62${noWa.replace(/\D/g,'').replace(/^0/, '')}?text=${encodeURIComponent(pesan)}`;
       }
 
-      tbody.innerHTML += `<tr class="border-b border-sage hover:bg-[#6E9B7F]/20"><td class="p-3">${i + 1}</td><td class="p-3">${npsn}</td><td class="p-3 font-medium whitespace-nowrap">${nama}</td><td class="p-3">${jenis}</td><td class="p-3 whitespace-nowrap">${kab}</td>${iconBulan}<td class="p-3 font-bold text-center">${sudahBulan}/12</td><td class="p-3">${noWa? `<a href="${waLink}" target="_blank" class="btn-sage px-3 py-1 rounded-lg text-xs">Chat</a>` : '-'}</td></tr>`;
+      tbody.innerHTML += `<tr class="border-b border-slate hover:bg-slate-100"><td class="p-3">${i + 1}</td><td class="p-3">${npsn}</td><td class="p-3 font-medium whitespace-nowrap">${nama}</td><td class="p-3">${jenis}</td><td class="p-3 whitespace-nowrap">${kab}</td>${iconBulan}<td class="p-3 font-bold text-center">${sudahBulan}/12</td><td class="p-3">${noWa? `<a href="${waLink}" target="_blank" class="btn-navy px-3 py-1 rounded-lg text-xs">Chat</a>` : '-'}</td></tr>`;
     });
   }
 
