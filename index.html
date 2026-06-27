@@ -4,36 +4,104 @@
 <meta charset="UTF-8">
 <title>Dashboard Laporan BOSP Reguler SMA Provinsi Jambi Tahun 2026</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<style>body { background-color: #f1f5f9; }.card { background-color: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); }</style>
+<style>
+  body { background-color: #f1f5f9; }
+ .card { background-color: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); }
+  th { position: sticky; top: 0; background: #f8fafc; z-index: 10; }
+</style>
 </head>
 <body class="p-4 md:p-8">
-<div class="max-w-5xl mx-auto">
+<div class="max-w-7xl mx-auto">
   <h1 class="text-3xl font-bold mb-2">Dashboard Laporan BOSP Reguler SMA Provinsi Jambi Tahun 2026</h1>
   <p class="text-gray-500 mb-6">Update terakhir: <span id="lastUpdate">Loading...</span></p>
   
+  <!-- 4 KARTU TETEP -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
     <div class="card"><p class="text-gray-500 text-sm">Total Sekolah</p><p id="total" class="text-4xl font-bold">0</p></div>
     <div class="card"><p class="text-gray-500 text-sm">Sudah Kirim</p><p id="sudah" class="text-4xl font-bold text-green-600">0</p></div>
     <div class="card"><p class="text-gray-500 text-sm">Belum Kirim</p><p id="belum" class="text-4xl font-bold text-red-600">0</p></div>
     <div class="card"><p class="text-gray-500 text-sm">% Selesai</p><p id="persen" class="text-4xl font-bold text-blue-600">0%</p></div>
   </div>
+
+  <!-- TAMBAHAN: KOTAK CARI -->
+  <div class="card mb-4">
+    <input id="searchBox" type="text" placeholder="Cari NPSN, Nama Sekolah, atau Kabupaten..." 
+           class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+  </div>
+
+  <!-- TAMBAHAN: TABEL SEKOLAH -->
+  <div class="card overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-gray-600 border-b">
+          <th class="p-3">No</th>
+          <th class="p-3">NPSN</th>
+          <th class="p-3">Nama Sekolah</th>
+          <th class="p-3">Status</th>
+          <th class="p-3">Kabupaten</th>
+          <th class="p-3">STATUS KIRIM</th>
+          <th class="p-3">Chat Whatsapp</th>
+        </tr>
+      </thead>
+      <tbody id="tabelBody">
+        <tr><td colspan="7" class="p-6 text-center text-gray-400">Loading data...</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+
 <script>
-  // GANTI LINK INI PAKE LINK PUBLIK CSV LU LUR
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=147011660&single=true&output=csv'; 
+  let semuaData = []; // Simpen data biar bisa dicari
+
+  function renderTabel(data) {
+    const tbody = document.getElementById('tabelBody');
+    if(data.length === 0) { 
+      tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-gray-400">Data tidak ditemukan</td></tr>`; 
+      return; 
+    }
+    tbody.innerHTML = '';
+    data.forEach((row, i) => {
+      const statusWarna = row['STATUS KIRIM']?.toUpperCase() === 'SAMA'? 'text-green-600 font-bold' : 'text-red-600 font-bold';
+      const noWa = row['NO WA'] || row['No WA'] || row['Whatsapp'] || ''; // Otomatis deteksi nama kolom WA
+      const waLink = noWa? `https://wa.me/62${noWa.replace(/^0/, '')}?text=Halo ${row['NAMA SEKOLAH']}, Status BOSP 2026 Bapak/Ibu masih ${row['STATUS KIRIM']}. Mohon segera diperbaiki.` : '#';
+      
+      tbody.innerHTML += `
+        <tr class="border-b hover:bg-gray-50">
+          <td class="p-3">${i + 1}</td>
+          <td class="p-3">${row['NPSN'] || '-'}</td>
+          <td class="p-3 font-medium">${row['NAMA SEKOLAH'] || '-'}</td>
+          <td class="p-3">${row['JENIS'] || '-'}</td>
+          <td class="p-3">${row['KAB/KOTA'] || row['KABUPATEN'] || '-'}</td>
+          <td class="p-3 ${statusWarna}">${row['STATUS KIRIM'] || '-'}</td>
+          <td class="p-3">
+            ${noWa? `<a href="${waLink}" target="_blank" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-green-600">Chat</a>` : '-'}
+          </td>
+        </tr>
+      `;
+    });
+  }
 
   async function loadData() {
     try {
       const res = await fetch(SHEET_CSV_URL);
+      if(!res.ok) throw new Error('Gagal fetch');
       const csvText = await res.text();
       const lines = csvText.trim().split('\n');
-      const headers = lines.shift().split(',').map(h => h.trim());
-      const idxStatus = headers.indexOf('STATUS KIRIM');
-      const dataStatus = lines.map(l => l.split(',')[idxStatus]?.trim().replace(/"/g,''));
+      const headers = lines.shift().split(',').map(h => h.trim().replace(/"/g,'')); // Baris 1 = nama kolom
       
-      const total = dataStatus.length;
-      const sudah = dataStatus.filter(s => s?.toUpperCase() === 'SAMA').length;
-      const belum = dataStatus.filter(s => s?.toUpperCase() === 'BELUM SAMA').length;
+      // Jadikan semua jadi Object {NPSN:..., NAMA SEKOLAH:...}
+      semuaData = lines.map(l => {
+        const cols = l.split(',');
+        let obj = {};
+        headers.forEach((h, i) => { obj[h] = cols[i]?.trim().replace(/"/g,'') || ''; });
+        return obj;
+      });
+      
+      // HITUNG 4 KARTU - RUMUS LU TADI
+      const total = semuaData.length;
+      const sudah = semuaData.filter(s => s['STATUS KIRIM']?.toUpperCase() === 'SAMA').length;
+      const belum = total - sudah;
       const persen = total > 0? ((sudah / total) * 100).toFixed(1) : 0;
 
       document.getElementById('total').innerText = total;
@@ -41,11 +109,24 @@
       document.getElementById('belum').innerText = belum;
       document.getElementById('persen').innerText = persen + '%';
       document.getElementById('lastUpdate').innerText = new Date().toLocaleString('id-ID');
+      
+      // TAMPILIN TABEL
+      renderTabel(semuaData);
     } catch(e) {
-      document.getElementById('lastUpdate').innerText = 'Gagal load: Cek link publik';
+      document.getElementById('tabelBody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Gagal load: Cek link publik & nama kolom</td></tr>`;
       console.error(e);
     }
   }
+
+  // FITUR CARI
+  document.getElementById('searchBox').addEventListener('input', (e) => {
+    const keyword = e.target.value.toLowerCase();
+    const hasilCari = semuaData.filter(d => 
+      JSON.stringify(d).toLowerCase().includes(keyword) // Cari di semua kolom
+    );
+    renderTabel(hasilCari);
+  });
+
   loadData();
 </script>
 </body>
