@@ -9,29 +9,29 @@
   <script>tailwind.config = { darkMode: 'class' }</script>
 
   <style>
-/* PALET WARNA BARU MACHO */
-body { background-color: #F5EFE0; } /* Krem Muda */
-.card { border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); background-color: #D9D2C5; } /* Krem Tua */
+/* PALET WARNA SAGE GREEN BARU */
+body { background-color: #DDEBD2; } /* Mint */
+.card { border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); background-color: #A3BFA3; } /* Sage Muda */
 .bulan-icon { font-size: 14px; text-align: center; width: 24px; }
 
-.btn-navy { background-color: #2A2A40; color: #F5EFE0; font-weight: 600; }
-.btn-navy:hover { background-color: #8B93B3; }
+.btn-sage { background-color: #4A6F5A; color: #DDEBD2; font-weight: 600; }
+.btn-sage:hover { background-color: #6E9B7F; }
 
-.thead-navy { background-color: #2A2A40; color: #F5EFE0; }
+.thead-sage { background-color: #4A6F5A; color: #DDEBD2; }
 
-.text-navy { color: #2A2A40; }
-.border-navy { border-color: #8B93B3; }
+.text-sage { color: #4A6F5A; }
+.border-sage { border-color: #A3BFA3; }
 
-  #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #2A2A40; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.6s ease-out; }
+  #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #4A6F5A; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.6s ease-out; }
   #loading-screen img { width: 140px; animation: pulse-glow 1.8s infinite ease-in-out; }
-  @keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #8B93B3); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #8B93B3); } }
+  @keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #6E9B7F); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #6E9B7F); } }
   ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-thumb { background-color: #8B93B3; border-radius: 10px; }
-    * { scrollbar-width: thin; scrollbar-color: #8B93B3 #D9D2C5; }
+  ::-webkit-scrollbar-thumb { background-color: #6E9B7F; border-radius: 10px; }
+    * { scrollbar-width: thin; scrollbar-color: #6E9B7F #A3BFA3; }
   </style>
 </head>
 
-<body class="p-4 md:p-8 text-navy transition-colors duration-300">
+<body class="p-4 md:p-8 text-sage transition-colors duration-300">
   <div id="loading-screen"><img src="./logo-jambi.png" alt="Loading Sepucuk Jambi..."></div>
 
   <div class="max-w-[1600px] mx-auto">
@@ -42,11 +42,10 @@ body { background-color: #F5EFE0; } /* Krem Muda */
           <h1 class="text-2xl md:text-3xl font-bold">Dashboard Laporan BOSP Reguler SMA</h1>
           <p class="text-lg md:text-xl font-semibold">Provinsi Jambi Tahun 2026</p>
           <p class="text-sm opacity-70">Update terakhir: <span id="lastUpdate">Loading...</span></p>
-          <!-- TOMBOL TANPA ICON + WARNA NAVY -->
-          <a href="./rekap.html" class="mt-2 inline-block btn-navy px-4 py-2 rounded-lg text-sm">Lihat Rekap Kabupaten</a>
+          <!-- TOMBOL TANPA ICON + WARNA SAGE -->
+          <a href="./rekap.html" class="mt-2 inline-block btn-sage px-4 py-2 rounded-lg text-sm">Lihat Rekap Kabupaten</a>
         </div>
       </div>
-      <!-- TOMBOL DARK MODE JUGA GUE GANTI WARNA -->
       <button id="theme-toggle" class="p-3 rounded-full card shadow-md hover:scale-110 transition absolute top-4 right-4 md:static">
         <span id="theme-icon">🌙</span>
       </button>
@@ -54,15 +53,15 @@ body { background-color: #F5EFE0; } /* Krem Muda */
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
       <div class="card"><p class="opacity-70 text-sm">Total Sekolah</p><p id="total" class="text-4xl font-bold">0</p></div>
-      <div class="card"><p class="opacity-70 text-sm">Lengkap 12/12</p><p id="sudah" class="text-4xl font-bold text-green-700">0</p></div>
+      <div class="card"><p class="opacity-70 text-sm">Lengkap 12/12</p><p id="sudah" class="text-4xl font-bold text-green-800">0</p></div>
       <div class="card"><p class="opacity-70 text-sm">Belum Lengkap</p><p id="belum" class="text-4xl font-bold text-red-700">0</p></div>
-      <div class="card"><p class="opacity-70 text-sm">% Selesai</p><p id="persen" class="text-4xl font-bold text-blue-800">0%</p></div>
+      <div class="card"><p class="opacity-70 text-sm">% Selesai</p><p id="persen" class="text-4xl font-bold text-blue-900">0%</p></div>
     </div>
 
-    <div class="card mb-4"><input id="searchBox" type="text" placeholder="Cari NPSN, Nama Sekolah, atau Kabupaten..." class="w-full p-3 border rounded-lg bg-[#F5EFE0] border-navy placeholder-gray-500"></div>
+    <div class="card mb-4"><input id="searchBox" type="text" placeholder="Cari NPSN, Nama Sekolah, atau Kabupaten..." class="w-full p-3 border rounded-lg bg-[#DDEBD2] border-sage placeholder-gray-600"></div>
 
     <div class="card overflow-x-auto max-h-[calc(100vh-340px)] overflow-y-auto my-2">
-      <table class="w-full text-sm"><thead><tr class="text-left thead-navy border-b border-navy">
+      <table class="w-full text-sm"><thead><tr class="text-left thead-sage border-b border-sage">
         <th class="p-3">No</th><th class="p-3">NPSN</th><th class="p-3">Nama Sekolah</th><th class="p-3">Status</th><th class="p-3">Kabupaten</th>
         <th class="p-3 text-center" title="Januari">J</th><th class="p-3 text-center" title="Februari">F</th><th class="p-3 text-center" title="Maret">M</th><th class="p-3 text-center" title="April">A</th><th class="p-3 text-center" title="Mei">M</th><th class="p-3 text-center" title="Juni">J</th><th class="p-3 text-center" title="Juli">J</th><th class="p-3 text-center" title="Agustus">A</th><th class="p-3 text-center" title="September">S</th><th class="p-3 text-center" title="Oktober">O</th><th class="p-3 text-center" title="Nopember">N</th><th class="p-3 text-center" title="Desember">D</th>
         <th class="p-3">STATUS</th><th class="p-3">WA</th>
@@ -75,8 +74,8 @@ body { background-color: #F5EFE0; } /* Krem Muda */
   let semuaData = []; const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','Nopember','Desember'];
 
   const themeToggleBtn = document.getElementById('theme-toggle'); const themeIcon = document.getElementById('theme-icon'); const html = document.documentElement;
-  if (localStorage.getItem('theme') === 'dark') { html.classList.add('dark'); themeIcon.textContent = '☀️'; document.body.style.backgroundColor = '#1e1e2f'; } else { themeIcon.textContent = '🌙'; document.body.style.backgroundColor = '#F5EFE0'; }
-  themeToggleBtn.addEventListener('click', () => { html.classList.toggle('dark'); if (html.classList.contains('dark')) { localStorage.setItem('theme', 'dark'); themeIcon.textContent = '☀️'; document.body.style.backgroundColor = '#1e1e2f'; } else { localStorage.setItem('theme', 'light'); themeIcon.textContent = '🌙'; document.body.style.backgroundColor = '#F5EFE0'; } });
+  if (localStorage.getItem('theme') === 'dark') { html.classList.add('dark'); themeIcon.textContent = '☀️'; document.body.style.backgroundColor = '#2d3a2e'; } else { themeIcon.textContent = '🌙'; document.body.style.backgroundColor = '#DDEBD2'; }
+  themeToggleBtn.addEventListener('click', () => { html.classList.toggle('dark'); if (html.classList.contains('dark')) { localStorage.setItem('theme', 'dark'); themeIcon.textContent = '☀️'; document.body.style.backgroundColor = '#2d3a2e'; } else { localStorage.setItem('theme', 'light'); themeIcon.textContent = '🌙'; document.body.style.backgroundColor = '#DDEBD2'; } });
 
   function parseCSV(text) {
     const lines = text.trim().split('\n');
@@ -105,7 +104,7 @@ body { background-color: #F5EFE0; } /* Krem Muda */
         const val = get(row, b).toUpperCase().trim();
         if(val === 'TRUE' || val === '1' || val.includes('SUDAH')) {
           sudahBulan++;
-          return `<td class="bulan-icon text-green-700" title="${b}: SUDAH KIRIM">✅</td>`;
+          return `<td class="bulan-icon text-green-800" title="${b}: SUDAH KIRIM">✅</td>`;
         } else {
           return `<td class="bulan-icon opacity-40" title="${b}: BELUM KIRIM">⏳</td>`;
         }
@@ -128,7 +127,7 @@ body { background-color: #F5EFE0; } /* Krem Muda */
         waLink = `https://wa.me/62${noWa.replace(/\D/g,'').replace(/^0/, '')}?text=${encodeURIComponent(pesan)}`;
       }
 
-      tbody.innerHTML += `<tr class="border-b border-navy hover:bg-[#8B93B3]/20"><td class="p-3">${i + 1}</td><td class="p-3">${npsn}</td><td class="p-3 font-medium whitespace-nowrap">${nama}</td><td class="p-3">${jenis}</td><td class="p-3 whitespace-nowrap">${kab}</td>${iconBulan}<td class="p-3 font-bold text-center">${sudahBulan}/12</td><td class="p-3">${noWa? `<a href="${waLink}" target="_blank" class="btn-navy px-3 py-1 rounded-lg text-xs">Chat</a>` : '-'}</td></tr>`;
+      tbody.innerHTML += `<tr class="border-b border-sage hover:bg-[#6E9B7F]/20"><td class="p-3">${i + 1}</td><td class="p-3">${npsn}</td><td class="p-3 font-medium whitespace-nowrap">${nama}</td><td class="p-3">${jenis}</td><td class="p-3 whitespace-nowrap">${kab}</td>${iconBulan}<td class="p-3 font-bold text-center">${sudahBulan}/12</td><td class="p-3">${noWa? `<a href="${waLink}" target="_blank" class="btn-sage px-3 py-1 rounded-lg text-xs">Chat</a>` : '-'}</td></tr>`;
     });
   }
 
