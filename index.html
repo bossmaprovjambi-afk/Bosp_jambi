@@ -2,211 +2,140 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard BOSP Jambi 2026</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Ini buat grafiknya -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body{background:#f7f8fc;font-family:Inter,Arial,sans-serif;font-size:12px}
-.card{background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);padding:16px}
-.badge{padding:3px 8px;border-radius:999px;font-size:10px;font-weight:600}
-.badge-sudah{background:#dcfce7;color:#166534}
-.badge-belum{background:#fee2e2;color:#991b1b}
-.badge-negeri{background:#dbeafe;color:#1e40af}
-.badge-swasta{background:#fef3c7;color:#92400e}
-.btn-wa{background:#25D366;color:white;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600}
-.btn-wa:hover{background:#16a34a}
-select,input{border:1px solid #e5e7eb;border-radius:8px;padding:6px 10px;font-size:12px}
-th{background:#f9fafb;font-weight:600;position:sticky;top:0;z-index:10}
-td,th{padding:10px 12px;text-align:left;border-bottom:1px solid #f3f4f6;white-space:nowrap}
-tr:hover{background:#f9fafb}
+  body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+ .card { background-color: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 1.5rem; transition: all 0.3s; }
+ .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+  th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+ .status-sudah { background-color: #d1fae5; color: #065f46; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+ .status-belum { background-color: #fee2e2; color: #991b1b; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
 </style>
 </head>
-<body class="p-4">
+<body class="p-4 md:p-8">
 
-<div class="max-w-[1600px] mx-auto">
-
-  <!-- HEADER -->
-  <div class="flex justify-between items-center mb-4">
+<div class="max-w-7xl mx-auto">
+  <header class="flex flex-col md:flex-row justify-between items-center mb-8">
     <div>
-      <h1 class="text-2xl font-bold">Dashboard BOSP Jambi 2026</h1>
-      <p class="text-gray-500 text-sm">Update: <span id="waktuUpdate">-</span></p>
+      <h1 class="text-3xl font-bold text-gray-800">Dashboard BOSP Jambi 2026</h1>
+      <p class="text-gray-500">Monitoring Laporan Real-Time</p>
     </div>
-    <button onclick="refresh()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">🔄 Refresh</button>
-  </div>
+    <button id="refreshBtn" class="mt-4 md:mt-0 bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg shadow-md hover:bg-blue-700 transition">Refresh Data</button>
+  </header>
 
-  <!-- FILTER -->
-  <div class="card mb-4 flex-wrap gap-3 items-center">
-    <select id="filterKab" onchange="filter()"><option value="">Semua Kab/Kota</option></select>
-    <select id="filterStatus" onchange="filter()"><option value="">Semua Status Kirim</option><option>SUDAH KIRIM</option><option>BELUM KIRIM</option></select>
-    <select id="filterJenis" onchange="filter()"><option value="">Semua Jenis</option><option>Negeri</option><option>Swasta</option></select>
-    <input id="cariNama" placeholder="Cari Nama Sekolah / NPSN" onkeyup="filter()" class="flex-1 min-w-[200px]">
+  <div id="loader" class="text-center p-10">
+    <p class="text-lg text-gray-600">Memuat data dari Google Sheet...</p>
   </div>
+  
+  <div id="dashboard" class="hidden">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="card"><p class="text-gray-500">Total Sekolah</p><p id="totalSekolah" class="text-4xl font-bold">0</p></div>
+      <div class="card"><p class="text-gray-500">Sudah Kirim</p><p id="sudahKirim" class="text-4xl font-bold text-green-600">0</p></div>
+      <div class="card"><p class="text-gray-500">Belum Kirim</p><p id="belumKirim" class="text-4xl font-bold text-red-600">0</p></div>
+    </div>
 
-  <!-- KARTU STATISTIK + GRAFIK -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-    
-    <div class="card lg:col-span-2">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div>
-          <div class="text-gray-500 text-sm">Total Sekolah</div>
-          <div class="text-3xl font-bold" id="totalSekolah">0</div>
-        </div>
-        <div>
-          <div class="text-gray-500 text-sm">Sudah Kirim</div>
-          <div class="text-3xl font-bold text-green-600" id="jmlSudah">0</div>
-        </div>
-        <div>
-          <div class="text-gray-500 text-sm">Belum Kirim</div>
-          <div class="text-3xl font-bold text-red-600" id="jmlBelum">0</div>
-        </div>
-        <div>
-          <div class="text-gray-500 text-sm">% Terlaporkan</div>
-          <div class="text-3xl font-bold text-blue-600" id="persen">0%</div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="card lg:col-span-1">
+        <h3 class="font-bold text-lg mb-4">Progres Laporan</h3>
+        <canvas id="statusChart"></canvas>
+      </div>
+      <div class="card lg:col-span-2">
+        <h3 class="font-bold text-lg mb-4">Data Sekolah</h3>
+        <input type="text" id="searchInput" placeholder="Cari Nama Sekolah / NPSN..." class="w-full p-2 border rounded-lg mb-4">
+        <div class="overflow-x-auto max-h-96">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 sticky top-0"><tr><th>NPSN</th><th>Nama Sekolah</th><th>Kab/Kota</th><th>Status</th></tr></thead>
+            <tbody id="dataTable"></tbody>
+          </table>
         </div>
       </div>
     </div>
-
-    <!-- GRAFIK DONUT BARU -->
-    <div class="card flex items-center justify-center">
-      <canvas id="donutChart" style="max-height: 120px;"></canvas>
-    </div>
-
   </div>
-
-  <!-- TABEL UTAMA -->
-  <div class="card">
-    <div class="overflow-x-auto">
-      <table class="w-full" id="tabelData">
-        <thead id="kepalaTabel"></thead>
-        <tbody id="isiTabel"></tbody>
-      </table>
-    </div>
-  </div>
-
 </div>
 
 <script>
-const LINK_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=147011660&single=true&output=csv";
+  // LINK GOOGLE SHEET LU YANG UDAH BENER 100%
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?output=csv';
+  
+  let allData = [];
+  let statusChart;
 
-let dataAsli = [];
-let headers = [];
-let idx = {};
-let donutChart; // Variabel grafik
-
-function parseCSV(teks) {
-  let rows = []; let row = []; let cell = ''; let inQuotes = false;
-  for(let i=0; i<teks.length; i++) {
-    let c = teks[i], n = teks[i+1];
-    if(c === '"') { if(inQuotes && n === '"') {cell += '"'; i++;} else inQuotes =!inQuotes; }
-    else if(c === ',' &&!inQuotes) { row.push(cell.trim()); cell = ''; }
-    else if((c === '\n' || c === '\r') &&!inQuotes) {
-      if(c === '\r' && n === '\n') i++;
-      if(cell || row.length) { row.push(cell.trim()); rows.push(row); row = []; cell = ''; }
-    } else cell += c;
+  async function fetchData() {
+    document.getElementById('loader').classList.remove('hidden');
+    document.getElementById('dashboard').classList.add('hidden');
+    try {
+      const response = await fetch(SHEET_CSV_URL);
+      const csvText = await response.text();
+      const rows = csvText.split('\n').slice(1); // Hapus header
+      allData = rows.map(row => {
+        const cols = row.split(',');
+        return {
+          npsn: cols[0]?.trim(),
+          nama: cols[1]?.trim(),
+          kabkota: cols[2]?.trim(),
+          jenis: cols[3]?.trim(),
+          status: cols[4]?.trim().toUpperCase() // Biar SAMA / BELUM SAMA
+        };
+      }).filter(r => r.npsn); // Buang baris kosong
+      updateDashboard();
+    } catch (error) {
+      alert('Gagal memuat data. Pastiin Sheet sudah "Siapa saja dengan link" ya lur.');
+      console.error(error);
+    } finally {
+      document.getElementById('loader').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+    }
   }
-  if(cell || row.length) { row.push(cell.trim()); rows.push(row); }
-  return rows.filter(r => r.some(c => c));
-}
 
-async function load() {
-  let res = await fetch(LINK_CSV + '&t=' + Date.now());
-  let rows = parseCSV(await res.text());
-  let idxData = rows.findIndex(r => r[1] && /^\d{8}$/.test(r[1]));
-  headers = rows[idxData - 1];
-  dataAsli = rows.slice(idxData);
+  function updateDashboard() {
+    const sudah = allData.filter(d => d.status === 'SAMA').length;
+    const belum = allData.filter(d => d.status === 'BELUM SAMA').length;
+    const total = allData.length;
 
-  idx = {
-    npsn: headers.findIndex(h => h.toLowerCase().includes('npsn')),
-    nama: headers.findIndex(h => h.toLowerCase().includes('nama')),
-    status: headers.findIndex(h => h.toLowerCase() === 'status'),
-    kab: headers.findIndex(h => h.toLowerCase().includes('kab')),
-    statusKir: headers.findIndex(h => h.toLowerCase().includes('status kirim')),
-    hp: headers.findIndex(h => h.toLowerCase().includes('hp')),
-  };
+    document.getElementById('totalSekolah').innerText = total;
+    document.getElementById('sudahKirim').innerText = sudah;
+    document.getElementById('belumKirim').innerText = belum;
 
-  isiFilterKab();
-  filter();
-  document.getElementById('waktuUpdate').innerText = new Date().toLocaleString('id-ID');
-}
+    renderTable(allData);
+    renderChart(sudah, belum);
+  }
 
-function isiFilterKab() {
-  let kab = [...new Set(dataAsli.map(r => r[idx.kab]))].filter(Boolean).sort();
-  document.getElementById('filterKab').innerHTML = '<option value="">Semua Kab/Kota</option>' + kab.map(k => `<option>${k}</option>`).join('');
-}
+  function renderTable(data) {
+    const tbody = document.getElementById('dataTable');
+    tbody.innerHTML = data.map(d => `
+      <tr>
+        <td>${d.npsn}</td>
+        <td>${d.nama}</td>
+        <td>${d.kabkota}</td>
+        <td><span class="${d.status === 'SAMA'? 'status-sudah' : 'status-belum'}">${d.status}</span></td>
+      </tr>
+    `).join('');
+  }
+  
+  function renderChart(sudah, belum) {
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    if(statusChart) statusChart.destroy();
+    statusChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Sudah Kirim', 'Belum Kirim'],
+        datasets: [{ data: [sudah, belum], backgroundColor: ['#10B981', '#EF4444'] }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  }
 
-function filter() {
-  let fKab = document.getElementById('filterKab').value.toLowerCase();
-  let fStatus = document.getElementById('filterStatus').value.toLowerCase();
-  let fJenis = document.getElementById('filterJenis').value.toLowerCase();
-  let fCari = document.getElementById('cariNama').value.toLowerCase();
-
-  let data = dataAsli.filter(r => {
-    return (!fKab || (r[idx.kab]||'').toLowerCase() === fKab) &&
-           (!fStatus || (r[idx.statusKir]||'').toLowerCase().includes(fStatus)) &&
-           (!fJenis || (r[idx.status]||'').toLowerCase().includes(fJenis)) &&
-           ((r[idx.nama]||'').toLowerCase().includes(fCari) || (r[idx.npsn]||'').includes(fCari));
+  document.getElementById('refreshBtn').addEventListener('click', fetchData);
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const search = e.target.value.toLowerCase();
+    const filtered = allData.filter(d => d.nama.toLowerCase().includes(search) || d.npsn.includes(search));
+    renderTable(filtered);
   });
 
-  updateKartu(data);
-  renderTabel(data);
-}
-
-function updateKartu(data) {
-  let total = data.length;
-  let sudah = data.filter(r => (r[idx.statusKir]||'').toLowerCase().includes('sudah')).length;
-  let belum = total - sudah;
-  let persen = total? Math.round(sudah/total*100) : 0;
-
-  document.getElementById('totalSekolah').innerText = total;
-  document.getElementById('jmlSudah').innerText = sudah;
-  document.getElementById('jmlBelum').innerText = belum;
-  document.getElementById('persen').innerText = persen + '%';
-  
-  // UPDATE GRAFIK
-  if(donutChart) donutChart.destroy();
-  const ctx = document.getElementById('donutChart');
-  donutChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Sudah Kirim', 'Belum Kirim'],
-      datasets: [{
-        data: [sudah, belum],
-        backgroundColor: ['#22c55e', '#ef4444'],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      cutout: '70%',
-      plugins: { legend: { position: 'bottom', labels: {font: {size: 10}} }
-    }
-  });
-}
-
-function renderTabel(data) {
-  document.getElementById('kepalaTabel').innerHTML = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
-  
-  document.getElementById('isiTabel').innerHTML = data.map(r => '<tr>' + r.map((c,i) => {
-    if(i === idx.statusKir) {
-      return c.toLowerCase().includes('sudah')? 
-        `<td><span class="badge badge-sudah">✅ Sudah</span></td>` : 
-        `<td><span class="badge badge-belum">⚠️ Belum</span></td>`;
-    }
-    if(i === idx.status) {
-      return c.toLowerCase().includes('negeri')? 
-        `<td><span class="badge badge-negeri">Negeri</span></td>` : 
-        `<td><span class="badge badge-swasta">Swasta</span></td>`;
-    }
-    if(i === idx.hp && c) {
-      let hp = c.replace(/\D/g,'').replace(/^0/,'62');
-      let pesan = encodeURIComponent(`Yth. ${r[idx.nama]} NPSN ${r[idx.npsn]}\nMohon segera kirim laporan BOSP. Terima kasih.`);
-      return `<td><a href="https://wa.me/${hp}?text=${pesan}" target="_blank" class="btn-wa">💬 WA</a></td>`;
-    }
-    return `<td>${c}</td>`;
-  }).join('') + '</tr>').join('');
-}
-
-function refresh(){load()}
-load();
+  fetchData(); // Muat pertama kali
 </script>
 </body>
 </html>
