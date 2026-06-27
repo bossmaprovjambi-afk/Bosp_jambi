@@ -7,144 +7,153 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-.card { background-color: white; border-radius: 1rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); padding: 1.5rem; }
-  th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 0.875rem; }
-.badge-sudah { background-color: #dcfce7; color: #166534; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
-.badge-belum { background-color: #fee2e2; color: #991b1b; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+  body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+.card { background-color: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 1.5rem; }
+  th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+.status-sudah { background-color: #d1fae5; color: #065f46; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+.status-belum { background-color: #fee2e2; color: #991b1b; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+.row-clickable:hover { background-color: #eff6ff; cursor: pointer; } /* Biar keliatan bisa diklik */
+.modal-bg { background-color: rgba(0,0,0,0.5); }
 </style>
 </head>
 <body class="p-4 md:p-8">
 
 <div class="max-w-7xl mx-auto">
-  <header class="flex flex-col md:flex-row justify-between items-center mb-6">
+  <header class="flex flex-col md:flex-row justify-between items-center mb-8">
     <div>
-      <h1 class="text-2xl font-bold text-gray-800">Dashboard BOSP Jambi 2026</h1>
-      <p id="lastUpdate" class="text-gray-500 text-sm">Update: -</p>
+      <h1 class="text-3xl font-bold text-gray-800">Dashboard BOSP Jambi 2026</h1>
+      <p class="text-gray-500">Monitoring Laporan Real-Time</p>
     </div>
-    <button id="refreshBtn" class="mt-4 md:mt-0 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.885.666A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.609-1.276z" clip-rule="evenodd" /></svg>
-      Refresh
-    </button>
+    <button id="refreshBtn" class="mt-4 md:mt-0 bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg shadow-md hover:bg-blue-700 transition">Refresh Data</button>
   </header>
 
-  <div class="card mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <select id="filterKab" class="p-2 border rounded-lg bg-gray-50"><option>Semua Kab/Kota</option></select>
-      <select id="filterStatus" class="p-2 border rounded-lg bg-gray-50"><option value="">Semua Status</option><option value="SAMA">SUDAH KIRIM</option><option value="BELUM SAMA">BELUM KIRIM</option></select>
-      <select id="filterJenis" class="p-2 border rounded-lg bg-gray-50"><option value="">Semua Jenis</option></select>
-      <input type="text" id="searchInput" placeholder="Cari Nama Sekolah / NPSN..." class="p-2 border rounded-lg bg-gray-50">
+  <div id="loader" class="text-center p-10"><p class="text-lg text-gray-600">Memuat data...</p></div>
+
+  <div id="dashboard" class="hidden">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="card"><p class="text-gray-500">Total Sekolah</p><p id="totalSekolah" class="text-4xl font-bold">0</p></div>
+      <div class="card"><p class="text-gray-500">Sudah Kirim</p><p id="sudahKirim" class="text-4xl font-bold text-green-600">0</p></div>
+      <div class="card"><p class="text-gray-500">Belum Kirim</p><p id="belumKirim" class="text-4xl font-bold text-red-600">0</p></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="card lg:col-span-1"><h3 class="font-bold text-lg mb-4">Progres Laporan</h3><canvas id="statusChart"></canvas></div>
+      <div class="card lg:col-span-2">
+        <h3 class="font-bold text-lg mb-4">Data Sekolah - Klik baris untuk detail</h3>
+        <input type="text" id="searchInput" placeholder="Cari Nama Sekolah / NPSN..." class="w-full p-2 border rounded-lg mb-4">
+        <div class="overflow-x-auto max-h-96">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 sticky top-0"><tr><th>NPSN</th><th>Nama Sekolah</th><th>Kab/Kota</th><th>Status</th></tr></thead>
+            <tbody id="dataTable"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-    <div class="card"><p class="text-gray-500 text-sm">Total Sekolah</p><p id="totalSekolah" class="text-3xl font-bold">0</p></div>
-    <div class="card"><p class="text-gray-500 text-sm">Sudah Kirim</p><p id="sudahKirim" class="text-3xl font-bold text-green-600">0</p></div>
-    <div class="card"><p class="text-gray-500 text-sm">Belum Kirim</p><p id="belumKirim" class="text-3xl font-bold text-red-600">0</p></div>
-    <div class="card"><p class="text-gray-500 text-sm">% Terlaporkan</p><p id="persen" class="text-3xl font-bold text-blue-600">0%</p></div>
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="card lg:col-span-1"><h3 class="font-bold mb-4">Progres</h3><canvas id="statusChart"></canvas></div>
-    <div class="card lg:col-span-2"><h3 class="font-bold mb-4">Data Sekolah</h3><div class="overflow-x-auto max-h-[60vh]"><table class="w-full"><thead class="bg-gray-50 sticky top-0"><tr><th>NPSN</th><th>Nama Sekolah</th><th>Kab/Kota</th><th>Jenis</th><th>Status</th></tr></thead><tbody id="dataTable"></tbody></table></div></div>
+<!-- MODAL POPUP DETAIL SEKOLAH -->
+<div id="modal" class="fixed inset-0 modal-bg hidden items-center justify-center z-50">
+  <div class="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full m-4 relative">
+    <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-2xl">&times;</button>
+    <h2 id="modalTitle" class="text-2xl font-bold mb-4 text-gray-800"></h2>
+    <div id="modalBody" class="space-y-3 text-gray-700"></div>
   </div>
 </div>
 
 <script>
-  // LINK GOOGLE SHEET LU
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?output=csv';
-  
+
   let allData = [];
   let statusChart;
-  let headers = {}; // Buat nyimpen posisi kolom
-
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const rawHeaders = lines.shift().split(',').map(h => h.trim().toLowerCase().replace(/"/g, ''));
-    
-    // Pinter nyari nama kolom, mau ditulis gimana juga
-    headers.npsn = rawHeaders.findIndex(h => h.includes('npsn'));
-    headers.nama = rawHeaders.findIndex(h => h.includes('nama'));
-    headers.kabkota = rawHeaders.findIndex(h => h.includes('kab') || h.includes('kota'));
-    headers.jenis = rawHeaders.findIndex(h => h.includes('jenis'));
-    headers.status = rawHeaders.findIndex(h => h.includes('status'));
-
-    return lines.map(line => {
-      const cols = line.split(',').map(c => c.trim().replace(/"/g, ''));
-      return {
-        npsn: cols[headers.npsn],
-        nama: cols[headers.nama],
-        kabkota: cols[headers.kabkota],
-        jenis: cols[headers.jenis],
-        status: cols[headers.status]?.toUpperCase()
-      };
-    }).filter(r => r.npsn);
-  }
 
   async function fetchData() {
+    document.getElementById('loader').classList.remove('hidden');
+    document.getElementById('dashboard').classList.add('hidden');
     try {
-      const res = await fetch(SHEET_CSV_URL + '&t=' + new Date().getTime()); // Anti cache
-      const text = await res.text();
-      allData = parseCSV(text);
-      populateFilters();
-      applyFilters();
-      document.getElementById('lastUpdate').innerText = `Update: ${new Date().toLocaleTimeString('id-ID')}`;
-    } catch (e) {
-      alert('Gagal ambil data. Cek: 1. Sheet udah Public? 2. Link CSV bener?');
+      const response = await fetch(SHEET_CSV_URL + '&t=' + new Date().getTime()); // Anti cache
+      const csvText = await response.text();
+      const lines = csvText.split('\n');
+      const headers = lines.shift().split(',').map(h => h.toLowerCase().trim().replace(/"/g, ''));
+
+      allData = lines.map(line => {
+        const cols = line.split(',').map(c => c.trim().replace(/"/g, ''));
+        let obj = {};
+        headers.forEach((h, i) => obj[h] = cols[i]); // Ambil semua kolom, gak cuma 5
+        return obj;
+      }).filter(r => r.npsn);
+
+      updateDashboard();
+    } catch (error) {
+      alert('Gagal memuat data. Cek Google Sheet udah Public belum lur.');
+    } finally {
+      document.getElementById('loader').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
     }
   }
 
-  function populateFilters() {
-    const kab = [...new Set(allData.map(d => d.kabkota))].sort();
-    const jenis = [...new Set(allData.map(d => d.jenis))].sort();
-    document.getElementById('filterKab').innerHTML = '<option value="">Semua Kab/Kota</option>' + kab.map(k => `<option>${k}</option>`).join('');
-    document.getElementById('filterJenis').innerHTML = '<option value="">Semua Jenis</option>' + jenis.map(j => `<option>${j}</option>`).join('');
-  }
-
-  function applyFilters() {
-    const fKab = document.getElementById('filterKab').value;
-    const fStatus = document.getElementById('filterStatus').value;
-    const fJenis = document.getElementById('filterJenis').value;
-    const search = document.getElementById('searchInput').value.toLowerCase();
-
-    const filtered = allData.filter(d => 
-      (!fKab || d.kabkota === fKab) &&
-      (!fStatus || d.status === fStatus) &&
-      (!fJenis || d.jenis === fJenis) &&
-      (!search || d.nama.toLowerCase().includes(search) || d.npsn.includes(search))
-    );
-    updateUI(filtered);
-  }
-
-  function updateUI(data) {
-    const sudah = data.filter(d => d.status === 'SAMA').length;
-    const belum = data.filter(d => d.status === 'BELUM SAMA').length;
-    const total = data.length;
-    const persen = total > 0? ((sudah / total) * 100).toFixed(1) : 0;
+  function updateDashboard() {
+    const sudah = allData.filter(d => (d.status || d['status kirim'])?.toUpperCase() === 'SAMA').length;
+    const belum = allData.filter(d => (d.status || d['status kirim'])?.toUpperCase() === 'BELUM SAMA').length;
+    const total = allData.length;
 
     document.getElementById('totalSekolah').innerText = total;
     document.getElementById('sudahKirim').innerText = sudah;
     document.getElementById('belumKirim').innerText = belum;
-    document.getElementById('persen').innerText = persen + '%';
 
-    document.getElementById('dataTable').innerHTML = data.map(d => `
-      <tr class="hover:bg-gray-50">
-        <td>${d.npsn}</td><td>${d.nama}</td><td>${d.kabkota}</td><td>${d.jenis}</td>
-        <td><span class="${d.status === 'SAMA'? 'badge-sudah' : 'badge-belum'}">${d.status}</span></td>
+    renderTable(allData);
+    renderChart(sudah, belum);
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById('dataTable');
+    tbody.innerHTML = data.map(d => `
+      <tr class="row-clickable" onclick='showDetail(${JSON.stringify(d).replace(/'/g, "&#39;")})'>
+        <td>${d.npsn}</td>
+        <td>${d['nama sekolah'] || d.nama}</td>
+        <td>${d['kab/kota'] || d.kabkota}</td>
+        <td><span class="${(d.status || d['status kirim'])?.toUpperCase() === 'SAMA'? 'status-sudah' : 'status-belum'}">${d.status || d['status kirim']}</span></td>
       </tr>
     `).join('');
+  }
 
+  function renderChart(sudah, belum) {
+    const ctx = document.getElementById('statusChart').getContext('2d');
     if(statusChart) statusChart.destroy();
-    statusChart = new Chart(document.getElementById('statusChart'), {
+    statusChart = new Chart(ctx, {
       type: 'doughnut',
-      data: { labels: ['Sudah Kirim', 'Belum Kirim'], datasets: [{ data: [sudah, belum], backgroundColor: ['#22c55e', '#ef4444'] }] }
+      data: { labels: ['Sudah Kirim', 'Belum Kirim'], datasets: [{ data: [sudah, belum], backgroundColor: ['#10B981', '#EF4444'] }] },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } }
     });
   }
 
-  ['filterKab', 'filterStatus', 'filterJenis', 'searchInput', 'refreshBtn'].forEach(id => 
-    document.getElementById(id).addEventListener('input', applyFilters)
-  );
+  // FUNGSI POPUP
+  function showDetail(data) {
+    document.getElementById('modalTitle').innerText = data['nama sekolah'] || data.nama;
+    let bodyHTML = '';
+    for (const key in data) {
+      if (data[key]) { // Cuma munculin yang ada isinya
+        bodyHTML += `<div class="flex justify-between border-b pb-2"><span class="font-semibold capitalize">${key.replace(/_/g, ' ')}</span><span>${data[key]}</span></div>`;
+      }
+    }
+    document.getElementById('modalBody').innerHTML = bodyHTML;
+    document.getElementById('modal').classList.remove('hidden');
+    document.getElementById('modal').classList.add('flex');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+    document.getElementById('modal').classList.remove('flex');
+  }
+
   document.getElementById('refreshBtn').addEventListener('click', fetchData);
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const search = e.target.value.toLowerCase();
+    const filtered = allData.filter(d => (d['nama sekolah'] || d.nama).toLowerCase().includes(search) || d.npsn.includes(search));
+    renderTable(filtered);
+  });
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('modal').addEventListener('click', (e) => { if(e.target.id === 'modal') closeModal() }); // Klik luar ketutup
 
   fetchData();
 </script>
