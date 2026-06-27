@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Laporan BOSP 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <style>
+    body { font-family: 'Arial', sans-serif; }
+.label-cell { background-color: #e2e8f0; font-weight: 600; border: 1px solid #000; padding: 6px; width: 30%;}
+.value-cell { border: 1px solid #000; padding: 6px; background-color: #dcfce7;}
+.value-edit { border: 1px solid #000; padding: 6px; background-color: #dbeafe;}
+.value-input { border: 1px solid #000; padding: 6px; background-color: #fef9c3;}
+.header-cell { background-color: #1e293b; color: white; font-weight: bold; text-align: center; border: 1px solid #000; padding: 6px; font-size: 16px;}
+   @media print {
+   .no-print { display: none; } /* INI YG BIKIN KOTAK INPUT HILANG PAS CETAK */
+    body { background: white; } 
+    #konten { box-shadow: none; border: none; padding: 0; } 
+   .print-only { display: table-row; } /* INI YG BIKIN NPSN NONGOL PAS CETAK */
+   }
+  .print-only { display: none; } /* DEFAULT NYA DISEMBUNYIIN DI LAYAR */
+.dark.label-cell { background-color: #334155; border-color: #475569; color: #e2e8f0;}
+.dark.value-cell { background-color: #1e4620; border-color: #475569; color: #e2e8f0;}
+.dark.value-edit { background-color: #1e3a8a; border-color: #475569; color: #e2e8f0;}
+.dark.value-input { background-color: #713f12; border-color: #475569; color: #e2e8f0;}
+.dark.header-cell { background-color: #0f172a; border-color: #475569;}
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 p-4 md:p-8">
+  <div id="konten" class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-6 rounded-lg shadow-lg border-2 border-black">
+    <div class="flex justify-between items-center mb-4 no-print">
+        <a href="./index.html" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm">Kembali</a>
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold">🖨️ Print PDF</button>
+    </div>
+
+    <div class="border-2 border-black">
+        <div class="header-cell">LAPORAN REALISASI BOSP REGULER JENJANG SMA TAHUN 2026</div>
+        <table class="w-full border-collapse text-sm">
+            <!-- BARIS INI CUMA BUAT INPUT, HILANG PAS CETAK -->
+            <tr class="no-print">
+                <td class="label-cell">CARI NPSN</td>
+                <td class="value-input" colspan="2"><input type="text" id="inputNpsn" placeholder="Ketik NPSN lalu Enter..." class="w-full bg-transparent font-bold text-center"></td>
+            </tr>
+            <!-- BARIS INI NONGOL PAS CETAK DOANG -->
+            <tr class="print-only">
+                <td class="label-cell">NPSN</td>
+                <td class="value-cell" id="print_npsn">-</td>
+                <td class="value-cell text-green-700 font-bold">✓ NPSN Valid</td>
+            </tr>
+            <tr>
+                <td class="label-cell">NAMA SATUAN PENDIDIK</td>
+                <td class="value-cell" id="val_nama" colspan="2">-</td>
+            </tr>
+            <tr>
+                <td class="label-cell">Realisasi BOSP Reguler, Bulan</td>
+                <td class="value-edit"><select id="selectBulan" class="w-full bg-transparent font-bold text-center"></select></td>
+                <td class="value-cell text-slate-600 font-bold" id="statusKirim">-</td>
+            </tr>
+            <tr>
+                <td class="label-cell">Helpdesk BOSP Reguler</td>
+                <td class="value-edit"><select id="selectHelpdesk" class="w-full bg-transparent font-bold text-center text-red-700"><option>Shella Lovia, S.Pd</option><option>MISLANO1</option></select></td>
+                <td class="value-cell text-green-700 font-bold">NIP. 199301182025212079</td>
+            </tr>
+        </table>
+        <table class="w-full border-collapse text-sm" id="tabelDetail"><tr><td class="header-cell" colspan="3">PROFIL SATUAN PENDIDIKAN SMA BOSP REGULER</td></tr><tr><td colspan="3" class="p-4 text-center text-slate-500">Silakan ketik NPSN dan tekan Enter</td></tr></table>
+    </div>
+  </div>
+<script>
+  const SHEET_DATA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=147011660&single=true&output=csv'; 
+  const SHEET_COVER_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=1174222712&single=true&output=csv'; 
+
+  const BULAN = ['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOPEMBER','DESEMBER'];
+  let dataSekolahGlobal = [];
+  let dataCoverGlobal = [];
+  let npsnSekarang = ''; // SIMPAN NPSN YG LAGI DIBUKA
+
+  const get = (row, namaKolom) => { const key = Object.keys(row).find(k => k.trim().toLowerCase() === namaKolom.trim().toLowerCase()); return row[key] || '0'; }
+  const parseCSV = text => { const lines = text.trim().split('\n'); const headers = lines.shift().split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/^"|"$/g, '').trim()); return lines.map(line => { const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim()); return headers.reduce((obj, header, i) => { obj[header] = values[i] || ''; return obj; }, {}); }); }
+  const bersihAngka = (rp) => parseInt(String(rp).replace(/[^0-9]/g, '')) || 0;
+  const formatRupiah = (angka) => `Rp ${angka.toLocaleString('id-ID')}`;
+  const buatBaris = (no, label, value) => `<tr><td class="label-cell w-12 text-center">${no}</td><td class="label-cell">${label}</td><td class="value-cell">: ${value}</td></tr>`;
+
+  function updateStatusBulan(sekolah, bulanDipilih) {
+    const val = get(sekolah, bulanDipilih).toUpperCase().trim();
+    const statusEl = document.getElementById('statusKirim');
+    if (val === 'TRUE' || val === '1' || val.includes('SUDAH')) {
+      statusEl.innerHTML = '✓ Sudah Kirim'; statusEl.className = 'value-cell text-green-700 font-bold';
+    } else {
+      statusEl.innerHTML = '✗ Belum Kirim'; statusEl.className = 'value-cell text-red-700 font-bold';
+    }
+  }
+
+  function tampilkanData(sekolah, cover) {
+    document.getElementById('val_nama').innerText = get(sekolah, 'Nama Sekolah');
+    document.getElementById('print_npsn').innerText = npsnSekarang; // ISI NPSN BUAT PRINT
+
+    const selectBulan = document.getElementById('selectBulan');
+    selectBulan.value = BULAN[new Date().getMonth()];
+    updateStatusBulan(sekolah, selectBulan.value);
+    selectBulan.onchange = () => updateStatusBulan(sekolah, selectBulan.value);
+
+    const pagu = formatRupiah(bersihAngka(get(cover, 'PAGU BOSP Reguler Tahun 2026')));
+    const salurTahap1 = formatRupiah(bersihAngka(get(cover, 'Salur BOSP 2026 (Tahap I)')));
+    const belanjaOp = formatRupiah(bersihAngka(get(cover, 'BELANJA OPERASI (PAKAI HABIS, BARANG DAN JASA) (5.1)')));
+    const belanjaModal = formatRupiah(bersihAngka(get(cover, 'BELANJA MODAL (5.2)')));
+    const sisaKas = formatRupiah(bersihAngka(get(cover, 'Sisa Saldo KAS Tunai Keseluruhan Dana BOSP')));
+
+    let htmlTabel = '';
+    htmlTabel += buatBaris(1, 'Status Sekolah', get(sekolah, 'Status'));
+    htmlTabel += buatBaris(2, 'Kabupaten/Kota', get(sekolah, 'Kabupaten'));
+    htmlTabel += buatBaris(3, 'Nama Kepala Sekolah', get(sekolah, 'Nama Kepala Sekolah'));
+    htmlTabel += buatBaris(4, 'Nama Bendahara BOSP', get(cover, 'Nama Bendahara BOSP'));
+    htmlTabel += `<tr><td class="header-cell" colspan="3">KEUANGAN BOSP 2026</td></tr>`;
+    htmlTabel += buatBaris(5, 'Pagu BOSP 2026', pagu);
+    htmlTabel += buatBaris(6, 'Salur Tahap I', salurTahap1);
+    htmlTabel += buatBaris(7, 'Belanja Operasi', belanjaOp);
+    htmlTabel += buatBaris(8, 'Belanja Modal', belanjaModal);
+    htmlTabel += buatBaris(9, 'Sisa Saldo KAS', sisaKas);
+
+    document.getElementById('tabelDetail').innerHTML = `<tr><td class="header-cell" colspan="3">PROFIL SATUAN PENDIDIKAN SMA BOSP REGULER</td></tr>` + htmlTabel;
+  }
+
+  function cariDanTampilkan(npsn) {
+    if(!npsn) return;
+    npsnSekarang = npsn; // SIMPAN NPSN NYA
+    const sekolah = dataSekolahGlobal.find(s => get(s, 'NPSN') === npsn);
+    const cover = dataCoverGlobal.find(s => get(s, 'NPSN') === npsn);
+
+    if (sekolah && cover) {
+      tampilkanData(sekolah, cover);
+    } else {
+      alert('✗ NPSN Tidak Ditemukan di 1/2 Sheet');
+    }
+  }
+
+  async function init() {
+    const [resData, resCover] = await Promise.all([fetch(SHEET_DATA_URL), fetch(SHEET_COVER_URL)]);
+    dataSekolahGlobal = parseCSV(await resData.text());
+    dataCoverGlobal = parseCSV(await resCover.text());
+    
+    const selectBulan = document.getElementById('selectBulan');
+    BULAN.forEach(b => selectBulan.innerHTML += `<option value="${b}">${b}</option>`);
+
+    document.getElementById('inputNpsn').addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') { cariDanTampilkan(e.target.value.trim()); }
+    });
+  }
+  init();
+</script>
+</body>
+</html>
