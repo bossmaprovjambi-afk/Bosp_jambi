@@ -9,16 +9,13 @@
   <script>tailwind.config = { darkMode: 'class' }</script>
 
   <style>
-/* BALIK KE TEMA DARK SLATE ASAL */
 .card { border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); backdrop-blur-sm; }
 .bulan-icon { font-size: 14px; text-align: center; width: 24px; }
   #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0f172a, #1e293b); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.6s ease-out; }
   #loading-screen img { width: 140px; animation: pulse-glow 1.8s infinite ease-in-out; }
-  @keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #facc15); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #facc15); } }
+  @keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #facc15); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #facc15); }
   ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background-color: #475569; border-radius: 10px; }
-  ::-webkit-scrollbar-thumb:hover { background-color: #64748b; }
     * { scrollbar-width: thin; scrollbar-color: #475569 transparent; }
   </style>
 </head>
@@ -31,7 +28,7 @@
       <div class="flex items-center gap-4 text-center md:text-left">
         <img src="./logo-jambi.png" alt="Logo Sepucuk Jambi" class="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg rounded-lg">
         <div>
-          <h1 class="text-2xl md:text-3xl font-bold">Dashboard Laporan BOSP Reguler SMA</h1>
+          <h1 id="judulUtama" class="text-2xl md:text-3xl font-bold">Dashboard Laporan BOSP Reguler SMA</h1>
           <p class="text-lg md:text-xl font-semibold text-slate-600 dark:text-slate-300">Provinsi Jambi Tahun 2026</p>
           <p class="text-sm text-slate-500 dark:text-slate-400">Update terakhir: <span id="lastUpdate">Loading...</span></p>
           <a href="./rekap.html" class="mt-2 inline-block bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Lihat Rekap Kabupaten</a>
@@ -121,6 +118,19 @@
       tbody.innerHTML += `<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50"><td class="p-3">${i + 1}</td><td class="p-3">${npsn}</td><td class="p-3 font-medium whitespace-nowrap">${nama}</td><td class="p-3">${jenis}</td><td class="p-3 whitespace-nowrap">${kab}</td>${iconBulan}<td class="p-3 font-bold text-center">${sudahBulan}/12</td><td class="p-3">${noWa? `<a href="${waLink}" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-xs">Chat</a>` : '-'}</td></tr>`;
     });
   }
+  
+  function autoFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const kabFilter = params.get('kab');
+    if (kabFilter) {
+      document.getElementById('searchBox').value = kabFilter; 
+      const hasilFilter = semuaData.filter(d => get(d, 'Kabupaten').toLowerCase() === kabFilter.toLowerCase());
+      renderTabel(hasilFilter);
+      document.getElementById('judulUtama').innerHTML += ` <span class="text-lg font-normal text-blue-400">- Filter: ${kabFilter}</span>`; 
+    } else {
+      renderTabel(semuaData); 
+    }
+  }
 
   async function loadData() {
     try {
@@ -136,7 +146,7 @@
       document.getElementById('belum').innerText = belum;
       document.getElementById('persen').innerText = persen + '%';
       document.getElementById('lastUpdate').innerText = new Date().toLocaleString('id-ID');
-      renderTabel(semuaData);
+      autoFilter(); 
     } catch(e) {
       console.error(e);
       document.getElementById('tabelBody').innerHTML = `<tr><td colspan="19" class="p-6 text-center text-red-500">Gagal load: ${e.message}</td></tr>`;
