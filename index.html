@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard BOSP Jambi 2026</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
  .card { background-color: white; border-radius: 1rem; padding: 1.5rem; }
   th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
  .badge-sudah { background-color: #dcfce7; color: #166534; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
  .badge-belum { background-color: #fee2e2; color: #991b1b; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
- .row-clickable:hover { background-color: #eff6ff; cursor: pointer; }
  .page-btn { padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; }
  .page-btn.active { background-color: #2563eb; color: white; }
  .page-btn:disabled { opacity: 0.5; }
@@ -23,7 +21,7 @@
 <div class="max-w-7xl mx-auto">
   <header class="flex justify-between items-center mb-6">
     <div><h1 class="text-2xl font-bold">Dashboard BOSP Jambi 2026</h1><p id="lastUpdate" class="text-gray-500 text-sm"></p></div>
-    <button id="refreshBtn" class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg">Refresh</button>
+    <button id="refreshBtn" class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg">Refresh Manual</button>
   </header>
 
   <div id="loader" class="text-center p-10 card"><p>Memuat 251 data...</p></div>
@@ -36,13 +34,10 @@
       <div class="card"><p class="text-gray-500 text-sm">%</p><p id="persen" class="text-3xl font-bold text-blue-600">0%</p></div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="card"><h3 class="font-bold mb-4">Progres</h3><canvas id="statusChart"></canvas></div>
-      <div class="card lg:col-span-2">
-        <input type="text" id="searchInput" placeholder="Cari Nama / NPSN..." class="w-full p-2 border rounded-lg mb-4">
-        <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr><th>NPSN</th><th>Nama</th><th>Kab/Kota</th><th>Status</th></tr></thead><tbody id="dataTable"></tbody></table></div>
-        <div id="pagination" class="flex justify-center items-center gap-2 mt-4"></div>
-      </div>
+    <div class="card">
+      <input type="text" id="searchInput" placeholder="Cari Nama / NPSN..." class="w-full p-2 border rounded-lg mb-4">
+      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr><th>NPSN</th><th>Nama</th><th>Kab/Kota</th><th>Status</th></tr></thead><tbody id="dataTable"></tbody></table></div>
+      <div id="pagination" class="flex justify-center items-center gap-2 mt-4"></div>
     </div>
     <div id="detailCard" class="card mt-6 hidden"><h3 id="detailTitle" class="text-xl font-bold mb-4"></h3><div id="detailBody" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div></div>
   </div>
@@ -55,32 +50,20 @@
   let allData = [];
   let filteredData = [];
   let currentPage = 1;
-  let statusChart;
 
-  // RUMUS ANTI GAGAL: BISA BACA KOMA DI DALAM ""
   function parseCSV(text) {
     const lines = text.trim().split('\n');
     const headers = lines.shift().split(',').map(h => h.trim().replace(/ /g, '_').toLowerCase());
-    
     const data = [];
     lines.forEach((line, i) => {
-      try {
-        // Regex ini yang bikin kuat. Dia gak ketipu koma di dalam nama sekolah
-        const cols = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(v => v.replace(/^"|"$/g, '').trim());
-        
-        if (cols.length !== headers.length) throw new Error(`Jumlah kolom beda. Harusnya ${headers.length}, isinya ${cols.length}`);
-
-        data.push({
-          npsn: cols[headers.indexOf('npsn')],
-          nama: cols[headers.indexOf('nama_sekolah')],
-          kabkota: cols[headers.indexOf('kab/kota')],
-          jenis: cols[headers.indexOf('jenis')],
-          status: cols[headers.indexOf('status_kirim')]
-        });
-      } catch (e) {
-        // KALO ERROR, LANGSUNG KASIH TAU BARISNYA
-        throw new Error(`Error di Baris Data ke-${i + 2}: ${e.message}. Isi baris: ${line}`);
-      }
+      const cols = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(v => v.replace(/^"|"$/g, '').trim());
+      data.push({
+        npsn: cols[headers.indexOf('npsn')],
+        nama: cols[headers.indexOf('nama_sekolah')],
+        kabkota: cols[headers.indexOf('kab/kota')],
+        jenis: cols[headers.indexOf('jenis')],
+        status: cols[headers.indexOf('status_kirim')]
+      });
     });
     return data.filter(r => r.npsn);
   }
@@ -91,15 +74,13 @@
     document.getElementById('dashboard').classList.add('hidden');
     try {
       const res = await fetch(SHEET_CSV_URL);
-      if (!res.ok) throw new Error('Gagal ambil dari Google');
       const text = await res.text();
-      allData = parseCSV(text); // Pake rumus anti gagal
+      allData = parseCSV(text);
       filteredData = allData;
       updateDashboard();
       document.getElementById('lastUpdate').innerText = `Update: ${new Date().toLocaleTimeString('id-ID')}`;
     } catch (error) {
-      // INI KUNCINYA LUR. DIA BAKAL TERIAK KALO ADA YANG SALAH
-      document.getElementById('loader').innerHTML = `<p class="text-red-600 font-bold text-lg">GAGAL TOTAL!</p><p class="text-gray-700 mt-2">${error.message}</p>`;
+      document.getElementById('loader').innerHTML = `<p class="text-red-600 font-bold">GAGAL: ${error.message}</p>`;
     } finally {
       document.getElementById('loader').classList.add('hidden');
       if(allData.length > 0) document.getElementById('dashboard').classList.remove('hidden');
@@ -119,16 +100,13 @@
     
     renderTable();
     renderPagination();
-    
-    if(statusChart) statusChart.destroy();
-    statusChart = new Chart(document.getElementById('statusChart'), { type: 'doughnut', data: { labels: ['Sudah', 'Belum'], datasets: [{ data: [sudah, belum], backgroundColor: ['#22c55e', '#ef4444'] }] } });
   }
 
   function renderTable() {
     const start = (currentPage - 1) * ROWS_PER_PAGE;
     const pageData = filteredData.slice(start, start + ROWS_PER_PAGE);
     document.getElementById('dataTable').innerHTML = pageData.map(d => `
-      <tr class="row-clickable" onclick="showDetail('${d.npsn}')">
+      <tr class="hover:bg-blue-50 cursor-pointer" onclick="showDetail('${d.npsn}')">
         <td>${d.npsn}</td><td>${d.nama}</td><td>${d.kabkota}</td>
         <td><span class="${d.status?.toUpperCase() === 'SAMA'? 'badge-sudah' : 'badge-belum'}">${d.status}</span></td>
       </tr>
@@ -171,7 +149,7 @@
     renderTable();
     renderPagination();
   };
-  fetchData();
+  fetchData(); // Cuma jalan 1x pas buka
 </script>
 </body>
 </html>
