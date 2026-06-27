@@ -6,8 +6,16 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body { background-color: #f1f5f9; }
-.card { background-color: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); }
-  th { position: sticky; top: 0; background: #f8fafc; z-index: 10; }
+ .card { background-color: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); }
+  
+  /* INI KUNCINYA LUR: BEKUIN HEADER TABEL */
+  thead th { 
+    position: sticky; 
+    top: 0; /* Nempel ke paling atas card */
+    background: #f8fafc; /* Warna background biar gak transparan */
+    z-index: 20; /* Biar di atas baris data */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); /* Kasih garis bayangan = pembatas */
+  }
 </style>
 </head>
 <body class="p-4 md:p-8">
@@ -24,7 +32,8 @@
 
   <div class="card mb-4"><input id="searchBox" type="text" placeholder="Cari NPSN, Nama Sekolah, atau Kabupaten..." class="w-full p-3 border rounded-lg"></div>
 
-  <div class="card overflow-x-auto">
+  <!-- KASIH max-h + overflow-y biar tabelnya bisa scroll sendiri -->
+  <div class="card overflow-x-auto max-h-[70vh] overflow-y-auto">
     <table class="w-full text-sm">
       <thead><tr class="text-left text-gray-600 border-b">
         <th class="p-3">No</th><th class="p-3">NPSN</th><th class="p-3">Nama Sekolah</th>
@@ -37,71 +46,37 @@
 <script>
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=147011660&single=true&output=csv'; 
   let semuaData = [];
-
-  // TRIK ANTI SPASI: Semua nama kolom di-trim dulu
-  function get(row, namaKolom) {
-    const key = Object.keys(row).find(k => k.trim().toLowerCase() === namaKolom.trim().toLowerCase());
-    return row[key] || '-';
-  }
-
+  function get(row, namaKolom) { const key = Object.keys(row).find(k => k.trim().toLowerCase() === namaKolom.trim().toLowerCase()); return row[key] || '-'; }
   function renderTabel(data) {
     const tbody = document.getElementById('tabelBody');
     if(data.length === 0) { tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center">Data tidak ditemukan</td></tr>`; return; }
     tbody.innerHTML = '';
     data.forEach((row, i) => {
-      const npsn = get(row, 'NPSN');
-      const nama = get(row, 'Nama Sekolah');
-      const jenis = get(row, 'Status');
-      const kab = get(row, 'Kabupaten');
-      const statusKirim = get(row, 'STATUS KIRIM'); // Udah di-trim otomatis
-      const noWa = get(row, 'No HP Kepala Sekolah');
-      
+      const npsn = get(row, 'NPSN'); const nama = get(row, 'Nama Sekolah'); const jenis = get(row, 'Status');
+      const kab = get(row, 'Kabupaten'); const statusKirim = get(row, 'STATUS KIRIM'); const noWa = get(row, 'No HP Kepala Sekolah');
       const statusWarna = statusKirim?.toUpperCase().includes('SAMA')? 'text-green-600 font-bold' : 'text-red-600 font-bold';
       const waLink = noWa!== '-'? `https://wa.me/62${noWa.replace(/\D/g,'').replace(/^0/, '')}?text=Halo ${nama}, Status BOSP 2026 Bapak/Ibu masih ${statusKirim}. Mohon segera diperbaiki.` : '#';
-      
-      tbody.innerHTML += `
-        <tr class="border-b hover:bg-gray-50">
-          <td class="p-3">${i + 1}</td>
-          <td class="p-3">${npsn}</td>
-          <td class="p-3 font-medium">${nama}</td>
-          <td class="p-3">${jenis}</td>
-          <td class="p-3">${kab}</td>
-          <td class="p-3 ${statusWarna}">${statusKirim}</td>
-          <td class="p-3">${noWa!== '-'? `<a href="${waLink}" target="_blank" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-green-600">Chat</a>` : '-'}</td>
-        </tr>
-      `;
+      tbody.innerHTML += `<tr class="border-b hover:bg-gray-50">
+        <td class="p-3">${i + 1}</td><td class="p-3">${npsn}</td><td class="p-3 font-medium">${nama}</td>
+        <td class="p-3">${jenis}</td><td class="p-3">${kab}</td><td class="p-3 ${statusWarna}">${statusKirim}</td>
+        <td class="p-3">${noWa!== '-'? `<a href="${waLink}" target="_blank" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-green-600">Chat</a>` : '-'}</td>
+      </tr>`;
     });
   }
-
   async function loadData() {
     try {
       const res = await fetch(SHEET_CSV_URL);
       const csvText = await res.text();
       const lines = csvText.trim().split('\n');
-      const headers = lines.shift().split(',').map(h => h.trim()); // Trim header biar aman
-      
-      semuaData = lines.map(l => { 
-        const cols = l.split(','); 
-        let obj = {}; 
-        headers.forEach((h, i) => { obj[h] = cols[i]?.trim().replace(/"/g,'') || ''; }); 
-        return obj; 
-      });
-      
-      const total = semuaData.length;
-      const sudah = semuaData.filter(s => get(s, 'STATUS KIRIM').toUpperCase().includes('SAMA')).length;
-      const belum = total - sudah;
-      const persen = total > 0? ((sudah / total) * 100).toFixed(1) : 0;
-
-      document.getElementById('total').innerText = total;
-      document.getElementById('sudah').innerText = sudah;
-      document.getElementById('belum').innerText = belum;
-      document.getElementById('persen').innerText = persen + '%';
+      const headers = lines.shift().split(',').map(h => h.trim());
+      semuaData = lines.map(l => { const cols = l.split(','); let obj = {}; headers.forEach((h, i) => { obj[h] = cols[i]?.trim().replace(/"/g,'') || ''; }); return obj; });
+      const total = semuaData.length; const sudah = semuaData.filter(s => get(s, 'STATUS KIRIM').toUpperCase().includes('SAMA')).length;
+      const belum = total - sudah; const persen = total > 0? ((sudah / total) * 100).toFixed(1) : 0;
+      document.getElementById('total').innerText = total; document.getElementById('sudah').innerText = sudah;
+      document.getElementById('belum').innerText = belum; document.getElementById('persen').innerText = persen + '%';
       document.getElementById('lastUpdate').innerText = new Date().toLocaleString('id-ID');
       renderTabel(semuaData);
-    } catch(e) {
-      document.getElementById('tabelBody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Gagal load: Cek link publik</td></tr>`;
-      console.error(e);
-    }
+    } catch(e) { document.getElementById('tabelBody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Gagal load</td></tr>`; }
   }
   document.getElementById('searchBox').addEventListener('input', (e) => {
     const keyword = e.target.value.toLowerCase();
