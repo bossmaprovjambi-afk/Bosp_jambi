@@ -8,6 +8,7 @@
   :root { 
     --hijau-dinas: #0A3D0A; 
     --emas: #D4AF37;       
+    --emas-gelap: #B8860B;
     --biru-navy: #0D1B2A;   
   }
   body { 
@@ -23,35 +24,38 @@
   .wrap { 
     text-align: center; 
     background: #fff; 
-    padding: 40px 40px; 
+    padding: 35px 40px; 
     border-radius: 16px; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3); 
+    box-shadow: 0 12px 35px rgba(0,0,0,0.4); 
     border-top: 8px solid var(--hijau-dinas);
-    max-width: 550px;
+    max-width: 520px;
   }
-  /* KOP SURAT */
+  /* KOP SURAT LOGO KIRI DOANG */
   .kop {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    gap: 15px;
+    margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 3px solid var(--hijau-dinas);
+    text-align: left;
   }
   .kop img {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
     object-fit: contain;
+    flex-shrink: 0;
   }
   .kop-tengah h1 { 
     margin: 0; 
     color: var(--hijau-dinas); 
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
   .kop-tengah p {
-    margin: 4px 0 0 0;
+    margin: 3px 0 0 0;
     color: #444;
     font-size: 13px;
     font-weight: 600;
@@ -59,52 +63,67 @@
   .sub {
     color: #6c757d;
     font-size: 14px;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
+    font-weight: 500;
   }
+  /* TOMBOL 3D BENERAN */
   button { 
-    padding: 16px 32px; font-size: 16px; cursor: pointer; border: none; border-radius: 8px; 
-    background: linear-gradient(90deg, var(--emas) 0%, #F2C464 100%);
+    padding: 16px 34px; font-size: 16px; cursor: pointer; border: none; border-radius: 10px; 
+    background: linear-gradient(180deg, var(--emas) 0%, var(--emas-gelap) 100%);
     color: var(--biru-navy); 
     font-weight: 800;
-    box-shadow: 0 5px 15px rgba(212,175,55,0.4);
-    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    /* EFEK 3D */
+    box-shadow: 
+      0 6px 0 var(--emas-gelap), /* Bayangan bawah tebal */
+      0 8px 15px rgba(0,0,0,0.3); /* Bayangan luar */
+    transition: all 0.1s ease;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    border: 2px solid var(--emas);
+    border: 1px solid var(--emas);
   }
   button:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 8px 20px rgba(212,175,55,0.6);
+    transform: translateY(2px); 
+    box-shadow: 
+      0 4px 0 var(--emas-gelap),
+      0 6px 12px rgba(0,0,0,0.3);
+  }
+  button:active {
+    transform: translateY(6px); /* Keteken ke dalem */
+    box-shadow: 
+      0 0px 0 var(--emas-gelap),
+      0 2px 5px rgba(0,0,0,0.2);
   }
   .info { 
-    color: #6c757d; 
+    color: #333; 
     font-size: 12px; 
-    margin-top: 20px; 
+    margin-top: 22px; 
     font-weight: 600;
     background: #f8f9fa;
-    padding: 10px;
-    border-radius: 6px;
-    border-left: 4px solid var(--hijau-dinas);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 5px solid var(--hijau-dinas);
+    display: flex;
+    justify-content: center;
+    gap: 15px;
   }
+  .info span { display: flex; align-items: center; gap: 5px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   
-  <!-- BAGIAN KOP SURAT -->
+  <!-- KOP SURAT LOGO PROVINSI KIRI DOANG -->
   <div class="kop">
-    <!-- GANTI LINK LOGO KAN KIRI DI SINI -->
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Coat_of_arms_of_Indonesia_-_Garuda_Pancasila.svg/512px-Coat_of_arms_of_Indonesia_-_Garuda_Pancasila.svg.png" alt="Logo Garuda">
+    <img src="attachment://0" alt="Logo Provinsi Jambi"> <!-- LOGO LU -->
     
     <div class="kop-tengah">
       <h1>LAPORAN REALISASI BOSP</h1>
       <p>SMAS NASIONAL SARIPUTRA</p>
       <p>KOTA JAMBI</p>
     </div>
-
-    <!-- KALO ADA LOGO SEKOLAH TARUH SINI. KALO GAK ADA, KOSONGIN SRC NYA -->
-    <img src="https://i.imgur.com/placeholder.png" alt="Logo Sekolah"> 
   </div>
 
   <p class="sub">TAHUN ANGGARAN 2026 | BULAN JANUARI</p>
@@ -115,7 +134,9 @@
   </a>
   
   <div class="info">
-    ✅ Ukuran Legal 8.5x14 | ✅ Fit to Width | ✅ 1 Halaman
+    <span>✅ Ukuran Legal 8.5x14</span> 
+    <span>✅ Fit to Width</span> 
+    <span>✅ 1 Halaman</span>
   </div>
 </div>
 </body>
