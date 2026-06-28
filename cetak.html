@@ -15,10 +15,6 @@
     margin: 0; 
     background: linear-gradient(135deg, var(--biru-navy) 0%, #1B263B 100%); 
     font-family: 'Segoe UI', 'Poppins', Arial, sans-serif; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     padding: 20px;
   }
   .wrap { 
@@ -28,7 +24,8 @@
     border-radius: 16px; 
     box-shadow: 0 12px 35px rgba(0,0,0,0.4); 
     border-top: 8px solid var(--hijau-dinas);
-    max-width: 520px;
+    max-width: 900px;
+    margin: 20px auto;
   }
   .kop {
     display: flex;
@@ -44,7 +41,7 @@
     height: 65px;
     object-fit: contain;
     flex-shrink: 0;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); /* Biar logonya 3D juga */
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
   }
   .kop-tengah h1 { 
     margin: 0; 
@@ -52,29 +49,34 @@
     font-size: 19px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
   .kop-tengah p { margin: 3px 0 0 0; color: #444; font-size: 13px; font-weight: 600; }
   .sub { color: #6c757d; font-size: 14px; margin-bottom: 28px; font-weight: 500; }
   
-  /* TOMBOL 3D NEKEN */
   button { 
     padding: 16px 34px; font-size: 16px; cursor: pointer; border: none; border-radius: 10px; 
     background: linear-gradient(180deg, var(--emas) 0%, var(--emas-gelap) 100%);
     color: var(--biru-navy); 
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
     box-shadow: 0 6px 0 var(--emas-gelap), 0 8px 15px rgba(0,0,0,0.3);
     transition: all 0.1s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid var(--emas);
   }
   button:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--emas-gelap), 0 6px 12px rgba(0,0,0,0.3); }
   button:active { transform: translateY(6px); box-shadow: 0 0px 0 var(--emas-gelap), 0 2px 5px rgba(0,0,0,0.2); }
   
+  .pdf-box {
+    margin-top: 25px;
+    border: 3px solid var(--hijau-dinas);
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
+  }
+  .pdf-box iframe {
+    width: 100%;
+    height: 80vh;
+    border: none;
+  }
   .info { 
     color: #333; 
     font-size: 12px; 
@@ -84,20 +86,14 @@
     padding: 12px;
     border-radius: 8px;
     border-left: 5px solid var(--hijau-dinas);
-    display: flex;
-    justify-content: center;
-    gap: 15px;
   }
-  .info span { display: flex; align-items: center; gap: 5px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   
-  <!-- LOGO PROVINSI JAMBI LU -->
   <div class="kop">
     <img src="attachment://0" alt="Logo Provinsi Jambi">
-    
     <div class="kop-tengah">
       <h1>LAPORAN REALISASI BOSP</h1>
       <p>SMAS NASIONAL SARIPUTRA</p>
@@ -107,15 +103,23 @@
 
   <p class="sub">TAHUN ANGGARAN 2026 | BULAN JANUARI</p>
   
-  <a href="https://docs.google.com/spreadsheets/d/1eqNg_asXE8QFR1_HKELJUDtKZkzejonaVozv6XbS4mk/export?format=pdf&gid=102046414&size=Legal&portrait=true&scale=2&top_margin=0.2&bottom_margin=0.2&left_margin=0.2&right_margin=0.2&printtitle=false&gridlines=false&fzr=false&AT_RP=min" target="_blank">
-    <button>🖨️ CETAK PDF LEGAL</button>
-  </a>
+  <button onclick="tampilkanPDF()">🖨️ LIHAT & CETAK PDF LEGAL</button>
+  
+  <div class="pdf-box" id="pdfViewer">
+    <!-- LINK PDF UKURAN DIKUNCI DI SINI. JANGAN DIUBAH LUR -->
+    <iframe src="https://docs.google.com/viewer?embedded=true&url=https://docs.google.com/spreadsheets/d/1eqNg_asXE8QFR1_HKELJUDtKZkzejonaVozv6XbS4mk/export?format=pdf&gid=102046414&size=Legal&portrait=true&scale=2&top_margin=0.2&bottom_margin=0.2&left_margin=0.2&right_margin=0.2&printtitle=false&gridlines=false&fzr=false&AT_RP=min"></iframe>
+  </div>
   
   <div class="info">
-    <span>✅ Ukuran Legal 8.5x14</span> 
-    <span>✅ Fit to Width</span> 
-    <span>✅ 1 Halaman</span>
+    ✅ Ukuran: Legal 8.5x14 | 1 Halaman | Fit to Width | DIKUNCI
   </div>
 </div>
+
+<script>
+function tampilkanPDF() {
+  document.getElementById('pdfViewer').style.display = 'block';
+  document.getElementById('pdfViewer').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
 </body>
 </html>
