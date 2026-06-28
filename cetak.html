@@ -35,10 +35,13 @@
   const gid = params.get('gid');
   const namaBulan = params.get('bulan') || 'BKU';
 
-  // INI LINK PUB PUNYA LU LUR, UDAH BENER
   const PUB_ID = '2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc';
   
-  const pdfUrl = `https://docs.google.com/spreadsheets/d/e/${PUB_ID}/pub?gid=${gid}&single=true&output=pdf`;
+  // LINK PDF ASLI DARI GSheet
+  const pdfLinkAsli = `https://docs.google.com/spreadsheets/d/e/${PUB_ID}/pub?gid=${gid}&single=true&output=pdf`;
+  
+  // KITA BUNGKUS PAKE GOOGLE VIEWER BIAR NAMPIL, GAK DOWNLOAD
+  const pdfUrl = `https://docs.google.com/viewer?embedded=true&url=${encodeURIComponent(pdfLinkAsli)}`;
 
   if(gid) {
     document.getElementById('pdf-frame').src = pdfUrl;
