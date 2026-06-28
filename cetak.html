@@ -3,73 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cetak Laporan BOSP - LEGAL</title>
+<title>Cetak Laporan BOSP - AUTO LEGAL</title>
 <style>
-  body { 
-    margin: 0; 
-    background: #f4f4f4; 
-    font-family: Arial, sans-serif; 
-  }
-  .wrap { 
-    max-width: 1200px; 
-    margin: 20px auto; 
-    background: #fff; 
-    padding: 20px; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 5px #ccc; 
-  }
-  h1 { 
-    text-align: center; 
-    margin: 0 0 15px 0; 
-    font-size: 22px;
-  }
-  .btn { 
-    text-align: center; 
-    margin-bottom: 15px; 
-  }
+  body { margin: 0; background: #f4f4f4; font-family: 'Segoe UI', Arial, sans-serif; }
+  .wrap { max-width: 1200px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  h1 { text-align: center; margin: 0 0 15px 0; color: #212529; }
+  .btn { text-align: center; margin-bottom: 15px; }
   button { 
-    padding: 14px 24px; 
-    font-size: 16px; 
+    padding: 16px 28px; 
+    font-size: 17px; 
     cursor: pointer; 
     border: none; 
-    border-radius: 6px; 
-    background: #dc3545; 
+    border-radius: 8px; 
+    background: #28a745; /* HIJAU = MENANG */
     color: #fff; 
     font-weight: bold;
+    box-shadow: 0 3px 6px rgba(40,167,69,0.3);
     transition: 0.2s;
   }
-  button:hover {
-    background: #b02a37;
-  }
+  button:hover { background: #218838; transform: scale(1.02); }
   object { 
     width: 100%; 
     height: 88vh; 
-    border: 1px solid #ddd; 
-    border-radius: 4px;
+    border: 2px solid #28a745; 
+    border-radius: 8px;
   }
   .info { 
     text-align: center; 
-    color: #e63946; 
-    font-size: 13px; 
-    margin-top: 10px; 
+    color: #28a745; 
+    font-size: 14px; 
+    margin-top: 12px; 
     font-weight: bold; 
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>LAPORAN BKU JANUARI 2026</h1>
+  <h1>LAPORAN BKU JANUARI 2026 - AUTO LEGAL</h1>
   
   <div class="btn">
-    <button onclick="window.open('januari.pdf','_blank')">KLIK UNTUK PRINT LEGAL 1 HALAMAN</button>
+    <button onclick="window.open('https://script.google.com/macros/s/AKfycbw-M2vekB7eT05_IRW1DrI6GVUj_LOJhhE7pocaKGKfIpneMqqYQ_qFw_4leR0hW3u0_A/exec','_blank')">
+      🖨️ PRINT AUTO LEGAL 1 HALAMAN
+    </button>
   </div>
 
-  <!-- KUNCI: LANGSUNG LOAD FILE PDF LOKAL -->
-  <object type="application/pdf" data="januari.pdf#toolbar=0&navpanes=0&scrollbar=0"></object> 
+  <!-- KUNCI KEMENANGAN: LINK APPS SCRIPT LU -->
+  <object type="application/pdf" data="https://script.google.com/macros/s/AKfycbw-M2vekB7eT05_IRW1DrI6GVUj_LOJhhE7pocaKGKfIpneMqqYQ_qFw_4leR0hW3u0_A/exec#toolbar=0&navpanes=0"></object> 
   
   <p class="info">
-    1. Pastiin `januari.pdf` ada di folder yang sama 
-    <br>2. Pas Print pilih `Ukuran Kertas: Legal` + `Skala: Sesuaikan`
+    ✅ AUTO UPDATE LANGSUNG DARI GSHEET 
+    <br>✅ UKURAN LEGAL 8.5x14 = PASTI 1 HALAMAN
   </p>
 </div>
 </body>
