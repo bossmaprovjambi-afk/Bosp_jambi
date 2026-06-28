@@ -14,7 +14,7 @@
 .bulan-icon { font-size: 14px; text-align: center; width: 24px; }
 #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0f172a, #1e293b); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.6s ease-out; }
 #loading-screen img { width: 140px; animation: pulse-glow 1.8s infinite ease-in-out; }
-@keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #facc15); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #facc15); } }
+@keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #facc15); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #facc15); }
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-thumb { background-color: #475569; border-radius: 10px; }
 * { scrollbar-width: thin; scrollbar-color: #475569 transparent; }
@@ -45,12 +45,12 @@
 
     <!-- 1. SIDEBAR PRO DENGAN DROPDOWN -->
     <aside class="w-64 bg-slate-800 dark:bg-slate-950 p-4 hidden lg:flex flex-col gap-4 flex-shrink-0">
-      <h2 class="text-lg font-bold text-white border-b border-slate-700 pb-2">Filter Laporan Bulan</h2>
+      <h2 class="text-lg font-bold text-white border-b border-slate-700 pb-2">Cetak Laporan Bulan</h2>
 
-      <button id="btn-all" onclick="resetFilter()" class="btn-pro active">Semua Data</button>
+      <button id="btn-all" onclick="resetFilter()" class="btn-pro active">Dashboard Utama</button>
 
       <div>
-        <label for="bulanSelect" class="text-sm text-slate-400 mb-1 block">Pilih Bulan</label>
+        <label for="bulanSelect" class="text-sm text-slate-400 mb-1 block">Pilih Bulan Cetak</label>
         <select id="bulanSelect" class="w-full p-2 rounded-lg bg-slate-700 border-slate-600 text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none">
           <!-- Option diisi JS -->
         </select>
@@ -179,19 +179,7 @@
     });
   }
 
-  // RUMUS FILTER DROPDOWN BARU
-  function filterBulan(namaBulan) {
-    filterBulanAktif = namaBulan;
-    document.getElementById('btn-all').classList.remove('active');
-
-    const hasilFilter = semuaData.filter(d => {
-      const val = get(d, namaBulan).toUpperCase().trim();
-      return val === 'TRUE' || val === '1' || val.includes('SUDAH');
-    });
-    document.getElementById('judulUtama').innerText = `Dashboard Laporan BOSP - ${namaBulan} 2026`;
-    renderTabel(hasilFilter);
-  }
-
+  function filterBulan(namaBulan) { /* Dikosongin, gak dipake lagi */ }
   function resetFilter() {
     filterBulanAktif = null;
     document.getElementById('btn-all').classList.add('active');
@@ -200,14 +188,29 @@
     autoFilter();
   }
 
+  // RUMUS DROPDOWN CETAK BARU - JANUARI ONLY
   function buatDropdownBulan() {
     const select = document.getElementById('bulanSelect');
     select.innerHTML = `<option value="">-- Pilih Bulan --</option>`;
+    
+    // LIST GID TIAP BULAN. INI KITA ISI DULU JANUARI
+    const GID_BULAN = { 
+      'Januari': '102046414', 
+      // 'Februari': 'GID_FEBRUARI_KAMU',
+    };
+
     BULAN.forEach((b) => {
-      select.innerHTML += `<option value="${b}">Laporan ${b}</option>`;
+      select.innerHTML += `<option value="${b}">${b}</option>`;
     });
+
     select.addEventListener('change', (e) => {
-      if(e.target.value) filterBulan(e.target.value);
+      const bulanDipilih = e.target.value;
+      const gid = GID_BULAN[bulanDipilih];
+      if(gid) {
+        window.open(`cetak.html?bulan=${bulanDipilih}&gid=${gid}`, '_blank'); // BUKA TAB BARU
+      } else if(bulanDipilih) {
+        alert(`GID untuk ${bulanDipilih} belum disetting lur. Isi dulu di kode.`);
+      }
     });
   }
 
@@ -238,7 +241,7 @@
       document.getElementById('belum').innerText = belum;
       document.getElementById('persen').innerText = persen + '%';
       document.getElementById('lastUpdate').innerText = new Date().toLocaleString('id-ID');
-      buatDropdownBulan(); // Panggil dropdown
+      buatDropdownBulan(); // Panggil dropdown cetak
       autoFilter();
     } catch(e) {
       console.error(e);
@@ -251,8 +254,7 @@
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
       const keyword = e.target.value.toLowerCase();
-      let dataDasar = filterBulanAktif? semuaData.filter(d => { const v=get(d, filterBulanAktif).toUpperCase().trim(); return v==='TRUE'||v==='1'||v.includes('SUDAH'); }) : semuaData;
-
+      let dataDasar = semuaData; // Search gak ngikut filter bulan lagi
       const hasilFilter = dataDasar.filter(d =>
         get(d, 'NPSN').toLowerCase().includes(keyword) ||
         get(d, 'Nama Sekolah').toLowerCase().includes(keyword) ||
@@ -273,7 +275,7 @@
     const ws = XLSX.utils.json_to_sheet(dataExcel);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Data BOSP");
-    const namaFile = filterBulanAktif? `Laporan_BOSP_${filterBulanAktif}.xlsx` : `Laporan_BOSP_Semua_Sekolah.xlsx`;
+    const namaFile = `Laporan_BOSP_Semua_Sekolah.xlsx`;
     XLSX.writeFile(wb, namaFile);
   });
 
