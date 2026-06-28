@@ -17,11 +17,12 @@
   .header { padding: 18px 25px; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center; }
   .header h1 { margin: 0; font-size: 18px; color: #212529; display: flex; align-items: center; gap: 8px; }
   .btn-group { display: flex; gap: 10px; }
-  button { 
+  button, a.btn { 
     padding: 10px 18px; font-size: 14px; cursor: pointer; border: none; border-radius: 6px; 
     color: #fff; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+    text-decoration: none;
   }
-  button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  button:hover, a.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
   .btn-print { background: var(--hijau); }
   .btn-close { background: var(--merah); }
   .preview-box { padding: 20px; }
@@ -34,13 +35,15 @@
     <div class="header">
       <h1>📊 LAPORAN BKU JANUARI 2026</h1>
       <div class="btn-group">
-        <button class="btn-print" onclick="window.print()">🖨️ PRINT PDF</button>
+        <!-- TOMBOL PRINT = LINK PDF LU LANGSUNG -->
+        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=102046414&single=true&output=pdf" target="_blank" class="btn btn-print">🖨️ PRINT PDF</a>
+        
         <button class="btn-close" onclick="window.close()">❌ TUTUP</button>
       </div>
     </div>
     <div class="preview-box">
-      <!-- KUNCI: LINK PUBLIKASI LANGSUNG DARI GOOGLE -->
-      <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT_YOUR_PUBLISH_ID/pubhtml?gid=102046414&single=true&widget=false&headers=false"></iframe> 
+      <!-- KUNCI: PAKAI /pubhtml BUKAN /pub?output=pdf -->
+      <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pubhtml?gid=102046414&single=true&widget=true&headers=false&chrome=false"></iframe> 
     </div>
   </div>
 </div>
