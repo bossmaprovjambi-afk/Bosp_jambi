@@ -19,22 +19,26 @@
 ::-webkit-scrollbar-thumb { background-color: #475569; border-radius: 10px; }
 * { scrollbar-width: thin; scrollbar-color: #475569 transparent; }
 
-/* RUNNING TEXT FINAL - ANTI PUTUS + FULL WIDTH */
-.ticker-wrap { overflow: hidden; width: 100%; } /* INI KUNCINYA BIAR MENTOK */
-.ticker { display: inline-flex; white-space: nowrap; animation: ticker-scroll 40s linear infinite; }
-.ticker-wrap:hover.ticker { animation-play-state: paused; }
-@keyframes ticker-scroll {
- 0% { transform: translateX(0); }
- 100% { transform: translateX(-50%); } /* Geser -50% karena duplikat */
+/* RUNNING TEXT 1 TEKS AJA - ANTI RIBET */
+.marquee-box { overflow: hidden; width: 100%; position: relative; }
+.marquee-text {
+  display: block;
+  white-space: nowrap;
+  padding-left: 100%; /* Mulai dari luar kanan */
+  animation: marquee-one 25s linear infinite; /* 25s = kecepatan */
+}
+@keyframes marquee-one {
+ 0% { transform: translateX(0%); }
+ 100% { transform: translateX(-100%); } /* Kabur ke kiri full */
 }
 
 /* BEKUIN HEADER TABEL */
 .table-sticky thead th {
   position: sticky; top: 0; z-index: 10;
-  background-color: rgb(248 250 252); /* light mode */
+  background-color: rgb(248 250 252);
 }
 .dark.table-sticky thead th {
-  background-color: rgb(30 41 59); /* dark mode slate-800 */
+  background-color: rgb(30 41 59);
 }
   </style>
 </head>
@@ -57,13 +61,12 @@
             <a href="./edit.html" target="_blank" class="inline-block bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Lapor RKAS Awal</a>
           </div>
 
-          <!-- RUNNING TEXT FINAL V4 -->
-          <div class="w-full bg-slate-700 rounded-lg mt-3 overflow-hidden"> <!-- w-full = kunci biar sama lebarnya sama card di bawah -->
-            <div class="ticker-wrap py-2 px-3">
-              <div class="ticker text-yellow-400 font-bold text-sm"> <!-- text-yellow-400 = warna logo -->
-                <span>SELAMAT DATANG di Web Pemantauan Laporan BOSP REGULER SMA Tahun 2026 Bidang Pembinaan SMA Dinas Provinsi Jambi || </span>
-                <span>SELAMAT DATANG di Web Pemantauan Laporan BOSP REGULER SMA Tahun 2026 Bidang Pembinaan SMA Dinas Provinsi Jambi || </span>
-              </div>
+          <!-- RUNNING TEXT 1 TEKS V5 -->
+          <div class="w-full bg-slate-700 rounded-lg mt-3"> 
+            <div class="marquee-box py-2 px-3">
+              <span class="marquee-text text-yellow-400 font-bold text-sm">
+                SELAMAT DATANG di Web Pemantauan Laporan BOSP REGULER SMA Tahun 2026 Bidang Pembinaan SMA Dinas Provinsi Jambi
+              </span>
             </div>
           </div>
 
