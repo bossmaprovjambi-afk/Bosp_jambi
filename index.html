@@ -1,122 +1,291 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cetak Laporan BOSP</title>
-<style>
-  :root { 
-    --hijau-dinas: #0A3D0A; 
-    --emas: #D4AF37;       
-    --emas-gelap: #B8860B;
-    --biru-navy: #0D1B2A;   
-  }
-  body { 
-    margin: 0; 
-    background: linear-gradient(135deg, var(--biru-navy) 0%, #1B263B 100%); 
-    font-family: 'Segoe UI', 'Poppins', Arial, sans-serif; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-  }
-  .wrap { 
-    text-align: center; 
-    background: #fff; 
-    padding: 40px 45px; 
-    border-radius: 16px; 
-    box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
-    border-top: 8px solid var(--hijau-dinas);
-    max-width: 520px;
-    width: 100%;
-  }
-  .kop {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 3px solid var(--hijau-dinas);
-    text-align: left;
-  }
-  .kop img {
-    width: 65px;
-    height: 65px;
-    object-fit: contain;
-    flex-shrink: 0;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
-  }
-  .kop-tengah h1 { 
-    margin: 0; 
-    color: var(--hijau-dinas); 
-    font-size: 19px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .kop-tengah p { margin: 3px 0 0 0; color: #444; font-size: 13px; font-weight: 600; }
-  .sub { color: #6c757d; font-size: 14px; margin-bottom: 30px; font-weight: 500; }
-  
-  /* TOMBOL 3D NEKEN BANGET */
-  button { 
-    width: 100%;
-    padding: 18px 34px; font-size: 16px; cursor: pointer; border: none; border-radius: 12px; 
-    background: linear-gradient(180deg, var(--emas) 0%, var(--emas-gelap) 100%);
-    color: var(--biru-navy); 
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 7px 0 var(--emas-gelap), 0 10px 18px rgba(0,0,0,0.3);
-    transition: all 0.1s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    border: 1px solid var(--emas);
-  }
-  button:hover { transform: translateY(3px); box-shadow: 0 4px 0 var(--emas-gelap), 0 7px 12px rgba(0,0,0,0.3); }
-  button:active { transform: translateY(7px); box-shadow: 0 0px 0 var(--emas-gelap), 0 3px 5px rgba(0,0,0,0.2); }
-  
-  .info { 
-    color: #333; 
-    font-size: 12px; 
-    margin-top: 25px; 
-    font-weight: 600;
-    background: #f8f9fa;
-    padding: 14px;
-    border-radius: 8px;
-    border-left: 5px solid var(--hijau-dinas);
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-  }
-</style>
+  <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Laporan BOSP Reguler SMA Provinsi Jambi Tahun 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <style>
+.card { border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); backdrop-blur-sm; }
+.bulan-icon { font-size: 14px; text-align: center; width: 24px; }
+#loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0f172a, #1e293b); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.6s ease-out; }
+#loading-screen img { width: 140px; animation: pulse-glow 1.8s infinite ease-in-out; }
+@keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px #facc15); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #facc15); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background-color: #475569; border-radius: 10px; }
+* { scrollbar-width: thin; scrollbar-color: #475569 transparent; }
+
+.table-sticky thead th {
+  position: sticky; top: 0; z-index: 10;
+  background-color: rgb(248 250 252);
+}
+.dark.table-sticky thead th {
+  background-color: rgb(30 41 59);
+}
+
+/* STYLE TOMBOL PRO SAMA KAYA REKAP */
+.btn-pro {
+  @apply bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition w-full text-left;
+}
+.btn-pro.active {
+  @apply bg-blue-600 hover:bg-blue-700;
+}
+  </style>
 </head>
-<body>
-<div class="wrap">
-  
-  <div class="kop">
-    <img src="attachment://0" alt="Logo Provinsi Jambi">
-    <div class="kop-tengah">
-      <h1>LAPORAN REALISASI BOSP</h1>
-      <p>SMAS NASIONAL SARIPUTRA</p>
-      <p>KOTA JAMBI</p>
-    </div>
+
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+  <div id="loading-screen"><img src="./logo_sma.png" alt="Loading SMA Jambi..."></div>
+
+  <div class="flex min-h-screen">
+
+    <!-- 1. SIDEBAR PRO DENGAN DROPDOWN -->
+    <aside class="w-64 bg-slate-800 dark:bg-slate-950 p-4 hidden lg:flex flex-col gap-4 flex-shrink-0">
+      <h2 class="text-lg font-bold text-white border-b border-slate-700 pb-2">Cetak Laporan Bulan</h2>
+
+      <button id="btn-all" onclick="resetFilter()" class="btn-pro active">Dashboard Utama</button>
+
+      <div>
+        <label for="bulanSelect" class="text-sm text-slate-400 mb-1 block">Pilih Bulan Cetak</label>
+        <select id="bulanSelect" class="w-full p-2 rounded-lg bg-slate-700 border-slate-600 text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+          <!-- Option diisi JS -->
+        </select>
+      </div>
+    </aside>
+
+    <!-- 2. KONTEN KAN -->
+    <main class="flex-1 overflow-y-auto">
+      <div class="max-w-[1400px] mx-auto p-4 md:p-6 lg:p-8">
+
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+          <div class="flex items-center gap-4 text-center md:text-left">
+            <img src="./logo-jambi.png" alt="Logo Sepucuk Jambi" class="w-20 h-20 md:w-28 md:h-28 lg:w-40 lg:h-40 object-contain drop-shadow-lg rounded-lg">
+            <div>
+              <h1 id="judulUtama" class="text-xl md:text-2xl lg:text-3xl font-bold">Dashboard Laporan BOSP Reguler SMA</h1>
+              <p class="text-base md:text-lg lg:text-xl font-semibold text-slate-600 dark:text-slate-300">Provinsi Jambi Tahun 2026</p>
+              <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400">Update terakhir: <span id="lastUpdate">Loading...</span></p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <a href="./rekap.html" class="inline-block bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Lihat Rekap Kabupaten</a>
+                <button id="exportBtn" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Download Excel</button>
+                <a href="./edit.html" target="_blank" class="inline-block bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Lapor RKAS Awal</a>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <img src="./logo_sma.png" alt="Logo SMA" class="w-20 h-20 md:w-28 md:h-28 lg:w-40 lg:h-40 object-contain drop-shadow-lg rounded-lg hidden md:block">
+            <button id="theme-toggle" class="p-3 rounded-full bg-white dark:bg-slate-800 shadow-md hover:scale-110 transition">
+              <span id="theme-icon">🌙</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="w-full bg-slate-700 rounded-lg mb-6 px-3 py-2">
+          <marquee behavior="scroll" direction="left" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();" class="text-yellow-400 font-bold text-sm">
+            SELAMAT DATANG di Web Pemantauan Laporan BOSP REGULER SMA Tahun 2026 Bidang Pembinaan SMA Dinas Provinsi Jambi
+          </marquee>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="card bg-white/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700"><p class="text-slate-500 dark:text-slate-400 text-sm">Total Sekolah</p><p id="total" class="text-3xl lg:text-4xl font-bold">0</p></div>
+          <div class="card bg-white/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700"><p class="text-slate-500 dark:text-slate-400 text-sm">Lengkap 12/12</p><p id="sudah" class="text-3xl lg:text-4xl font-bold text-green-600 dark:text-green-400">0</p></div>
+          <div class="card bg-white/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700"><p class="text-slate-500 dark:text-slate-400 text-sm">Belum Lengkap</p><p id="belum" class="text-3xl lg:text-4xl font-bold text-red-600 dark:text-red-400">0</p></div>
+          <div class="card bg-white/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700"><p class="text-slate-500 dark:text-slate-400 text-sm">% Selesai</p><p id="persen" class="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-400">0%</p></div>
+        </div>
+
+        <div class="card bg-white/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 mb-4"><input id="searchBox" type="text" placeholder="Cari NPSN, Nama Sekolah, atau Kabupaten..." class="w-full p-3 border rounded-lg bg-slate-50 dark:bg-slate-700 border-slate-300 dark:border-slate-600 placeholder-slate-400 dark:placeholder-slate-500"></div>
+
+        <div class="card bg-white/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 overflow-x-auto my-2">
+          <table class="w-full text-sm table-sticky min-w-[1200px]">
+            <thead>
+              <tr class="text-left text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700">
+                <th class="p-3 whitespace-nowrap">No</th><th class="p-3 whitespace-nowrap">NPSN</th><th class="p-3 whitespace-nowrap">Nama Sekolah</th><th class="p-3 whitespace-nowrap">Status</th><th class="p-3 whitespace-nowrap">Kabupaten</th>
+                <th class="p-3 text-center whitespace-nowrap" title="Januari">J</th><th class="p-3 text-center whitespace-nowrap" title="Februari">F</th><th class="p-3 text-center whitespace-nowrap" title="Maret">M</th><th class="p-3 text-center whitespace-nowrap" title="April">A</th><th class="p-3 text-center whitespace-nowrap" title="Mei">M</th><th class="p-3 text-center whitespace-nowrap" title="Juni">J</th><th class="p-3 text-center whitespace-nowrap" title="Juli">J</th><th class="p-3 text-center whitespace-nowrap" title="Agustus">A</th><th class="p-3 text-center whitespace-nowrap" title="September">S</th><th class="p-3 text-center whitespace-nowrap" title="Oktober">O</th><th class="p-3 text-center whitespace-nowrap" title="Nopember">N</th><th class="p-3 text-center whitespace-nowrap" title="Desember">D</th>
+                <th class="p-3 whitespace-nowrap">STATUS</th><th class="p-3 whitespace-nowrap">WA</th>
+              </tr>
+            </thead>
+            <tbody id="tabelBody">
+              <tr><td colspan="19" class="p-6 text-center text-slate-400">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
   </div>
 
-  <p class="sub">TAHUN ANGGARAN 2026 | BULAN JANUARI</p>
-  
-  <!-- LANGSUNG BUKA PDF DI TAB BARU. GAK ADA PREVIEW -->
-  <a href="https://docs.google.com/spreadsheets/d/1eqNg_asXE8QFR1_HKELJUDtKZkzejonaVozv6XbS4mk/export?format=pdf&gid=102046414&size=Legal&portrait=true&scale=2&top_margin=0.2&bottom_margin=0.2&left_margin=0.2&right_margin=0.2&printtitle=false&gridlines=false&fzr=false&AT_RP=min" target="_blank">
-    <button>🖨️ CETAK PDF LEGAL</button>
-  </a>
-  
-  <div class="info">
-    <span>✅ Ukuran Legal 8.5x14</span> 
-    <span>✅ 1 Halaman</span> 
-    <span>✅ Fit to Width</span>
-  </div>
-</div>
+<script>
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=147011660&single=true&output=csv';
+  let semuaData = []; let dataTertampil = []; let filterBulanAktif = null;
+  const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','Nopember','Desember'];
+
+  const themeToggleBtn = document.getElementById('theme-toggle'); const themeIcon = document.getElementById('theme-icon'); const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'dark') { html.classList.add('dark'); themeIcon.textContent = '☀️'; } else { themeIcon.textContent = '🌙'; }
+  themeToggleBtn.addEventListener('click', () => { html.classList.toggle('dark'); if (html.classList.contains('dark')) { localStorage.setItem('theme', 'dark'); themeIcon.textContent = '☀️'; } else { localStorage.setItem('theme', 'light'); themeIcon.textContent = '🌙'; } });
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines.shift().split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/^"|"$/g, '').trim());
+    return lines.map(line => {
+      const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+      return headers.reduce((obj, header, i) => { obj[header] = values[i] || ''; return obj; }, {});
+    });
+  }
+  function get(row, namaKolom) { const key = Object.keys(row).find(k => k.trim().toLowerCase() === namaKolom.trim().toLowerCase()); return row[key] || ''; }
+
+  function renderTabel(data) {
+    dataTertampil = data;
+    const tbody = document.getElementById('tabelBody');
+    if(data.length === 0) { tbody.innerHTML = `<tr><td colspan="19" class="p-6 text-center">Data tidak ditemukan</td></tr>`; return; }
+    tbody.innerHTML = '';
+
+    const sekarang = new Date();
+    const bulanSekarangIndex = sekarang.getMonth();
+    const bulanYangHarusSudah = BULAN.slice(0, bulanSekarangIndex);
+
+    data.forEach((row, i) => {
+      const npsn = get(row, 'NPSN'); const nama = get(row, 'Nama Sekolah'); const jenis = get(row, 'Status'); const kab = get(row, 'Kabupaten'); const noWa = get(row, 'No HP Kepala Sekolah');
+      let sudahBulan = 0;
+
+      const iconBulan = BULAN.map(b => {
+        const val = get(row, b).toUpperCase().trim();
+        if(val === 'TRUE' || val === '1' || val.includes('SUDAH')) {
+          sudahBulan++;
+          return `<td class="bulan-icon text-green-600 dark:text-green-400" title="${b}: SUDAH KIRIM">✅</td>`;
+        } else {
+          return `<td class="bulan-icon text-slate-400 dark:text-slate-600" title="${b}: BELUM KIRIM">⏳</td>`;
+        }
+      }).join('');
+
+      let waLink = '#';
+      if(noWa) {
+        const bulanBelum = bulanYangHarusSudah.filter(b => {
+          const v = get(row, b).toUpperCase().trim();
+          return!(v==='TRUE'||v==='1'||v.includes('SUDAH'));
+        });
+        let pesan = `Halo ${nama}, ini dari Dinas Pendidikan Provinsi Jambi.`;
+        if(bulanBelum.length > 0) {
+          const listBulan = bulanBelum.join(', ');
+          pesan += `\n\nUntuk Laporan BOSP 2026, s/d bulan ${BULAN[bulanSekarangIndex-1]} masih ada yg belum Bapak/Ibu kirim ya: ${listBulan}.\n\nMohon segera dilengkapi agar tidak menghambat penyaluran dana. Terima kasih.`;
+        } else {
+          pesan += `\n\nAlhamdulillah, Laporan BOSP 2026 Bapak/Ibu s/d bulan ${BULAN[bulanSekarangIndex-1]} sudah lengkap. Terima kasih.`;
+        }
+        waLink = `https://wa.me/62${noWa.replace(/\D/g,'').replace(/^0/, '')}?text=${encodeURIComponent(pesan)}`;
+      }
+
+      tbody.innerHTML += `<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50"><td class="p-3">${i + 1}</td><td class="p-3">${npsn}</td><td class="p-3 font-medium whitespace-nowrap">${nama}</td><td class="p-3">${jenis}</td><td class="p-3 whitespace-nowrap">${kab}</td>${iconBulan}<td class="p-3 font-bold text-center">${sudahBulan}/12</td><td class="p-3">${noWa? `<a href="${waLink}" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-xs font-bold">Chat</a>` : '-'}</td></tr>`;
+    });
+  }
+
+  function filterBulan(namaBulan) { /* Dikosongin, gak dipake lagi */ }
+  function resetFilter() {
+    filterBulanAktif = null;
+    document.getElementById('btn-all').classList.add('active');
+    document.getElementById('bulanSelect').value = "";
+    document.getElementById('judulUtama').innerText = `Dashboard Laporan BOSP Reguler SMA`;
+    autoFilter();
+  }
+
+  // RUMUS DROPDOWN CETAK BARU - JANUARI ONLY
+  function buatDropdownBulan() {
+    const select = document.getElementById('bulanSelect');
+    select.innerHTML = `<option value="">-- Pilih Bulan --</option>`;
+    
+    // LIST GID TIAP BULAN. INI KITA ISI DULU JANUARI
+    const GID_BULAN = { 
+      'Januari': '102046414', 
+      // 'Februari': 'GID_FEBRUARI_KAMU',
+    };
+
+    BULAN.forEach((b) => {
+      select.innerHTML += `<option value="${b}">${b}</option>`;
+    });
+
+    select.addEventListener('change', (e) => {
+      const bulanDipilih = e.target.value;
+      const gid = GID_BULAN[bulanDipilih];
+      if(gid) {
+        window.open(`cetak.html?bulan=${bulanDipilih}&gid=${gid}`, '_blank'); // BUKA TAB BARU
+      } else if(bulanDipilih) {
+        alert(`GID untuk ${bulanDipilih} belum disetting lur. Isi dulu di kode.`);
+      }
+    });
+  }
+
+  function autoFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const kabFilter = params.get('kab');
+    if (kabFilter) {
+      document.getElementById('searchBox').value = kabFilter;
+      const hasilFilter = semuaData.filter(d => get(d, 'Kabupaten').toLowerCase() === kabFilter.toLowerCase());
+      renderTabel(hasilFilter);
+      document.getElementById('judulUtama').innerHTML += ` <span class="text-lg font-normal text-blue-400">- Filter: ${kabFilter}</span>`;
+    } else {
+      renderTabel(semuaData);
+    }
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetch(SHEET_CSV_URL); if(!res.ok) throw new Error('Link CSV Gagal');
+      const csvText = await res.text();
+      semuaData = parseCSV(csvText);
+      const total = semuaData.length;
+      const sudah = semuaData.filter(s => BULAN.filter(b => { const v=get(s,b).toUpperCase().trim(); return v==='TRUE'||v==='1'||v.includes('SUDAH'); }).length === 12).length;
+      const belum = total - sudah;
+      const persen = total > 0? ((sudah / total) * 100).toFixed(1) : 0;
+      document.getElementById('total').innerText = total;
+      document.getElementById('sudah').innerText = sudah;
+      document.getElementById('belum').innerText = belum;
+      document.getElementById('persen').innerText = persen + '%';
+      document.getElementById('lastUpdate').innerText = new Date().toLocaleString('id-ID');
+      buatDropdownBulan(); // Panggil dropdown cetak
+      autoFilter();
+    } catch(e) {
+      console.error(e);
+      document.getElementById('tabelBody').innerHTML = `<tr><td colspan="19" class="p-6 text-center text-red-500">Gagal load: ${e.message}</td></tr>`;
+    }
+  }
+
+  let searchTimeout;
+  document.getElementById('searchBox').addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      const keyword = e.target.value.toLowerCase();
+      let dataDasar = semuaData; // Search gak ngikut filter bulan lagi
+      const hasilFilter = dataDasar.filter(d =>
+        get(d, 'NPSN').toLowerCase().includes(keyword) ||
+        get(d, 'Nama Sekolah').toLowerCase().includes(keyword) ||
+        get(d, 'Kabupaten').toLowerCase().includes(keyword)
+      );
+      renderTabel(hasilFilter);
+    }, 300);
+  });
+
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const dataExcel = dataTertampil.map((row, i) => {
+      let sudahBulan = 0;
+      BULAN.forEach(b => { const v=get(row,b).toUpperCase().trim(); if(v==='TRUE'||v==='1'||v.includes('SUDAH')) sudahBulan++; });
+      const obj = { No: i + 1, NPSN: get(row, 'NPSN'), 'Nama Sekolah': get(row, 'Nama Sekolah'), Status: get(row, 'Status'), Kabupaten: get(row, 'Kabupaten'), 'Total Kirim': `${sudahBulan}/12`, 'No HP Kepsek': get(row, 'No HP Kepala Sekolah'), };
+      BULAN.forEach(b => { obj[b] = get(row, b).toUpperCase().trim().includes('SUDAH') || get(row,b) === 'TRUE'? 'SUDAH' : 'BELUM'; });
+      return obj;
+    });
+    const ws = XLSX.utils.json_to_sheet(dataExcel);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Data BOSP");
+    const namaFile = `Laporan_BOSP_Semua_Sekolah.xlsx`;
+    XLSX.writeFile(wb, namaFile);
+  });
+
+  loadData();
+
+  window.addEventListener('load', () => {
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.opacity = '0';
+    setTimeout(() => { loadingScreen.style.display = 'none'; }, 600);
+  });
+</script>
 </body>
 </html>
