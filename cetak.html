@@ -5,72 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cetak Laporan BOSP</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
-  .container { max-width: 1200px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px #ccc; }
+  body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
+  .container { max-width: 1200px; margin: auto; background: #fff; padding: 20px; } 
   h1 { text-align: center; }
-  .btn-wrap { text-align: center; margin-bottom: 15px; display: flex; gap: 10px; justify-content: center; }
+  .btn-wrap { text-align: center; margin-bottom: 15px; }
   button { 
-    padding: 12px 20px; 
+    padding: 14px 24px; 
     font-size: 16px; 
     cursor: pointer; 
     border: none; 
     border-radius: 6px; 
+    background: #dc3545; 
     color: #fff; 
     font-weight: bold;
   }
-  #btn-jan { background: #28a745; } /* Hijau = Lihat */
-  #btn-print { background: #007bff; } /* Biru = Print */
-  #btn-print:disabled { background: #aaa; cursor: not-allowed; }
-  iframe { width: 100%; height: 85vh; border: 1px solid #ddd; }
+  object { width: 100%; height: 90vh; border: 1px solid #ddd; } /* GANTI IFRAME JADI OBJECT */
   .info { text-align: center; color: #e63946; font-size: 14px; margin-top: 10px; font-weight: bold; }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>LAPORAN BKU JANUARI 2026</h1>
+  <h1>LAPORAN BKU JANUARI 2026 - UKURAN LEGAL</h1>
   
   <div class="btn-wrap">
-    <button id="btn-jan">1. Lihat Januari</button>
-    <button id="btn-print" disabled>2. Print Legal PDF</button>
+    <button id="btn-print">KLIK DISINI UNTUK PRINT LEGAL</button>
   </div>
 
-  <iframe id="viewer" src="about:blank"></iframe>
-  <p class="info">PENTING: Jangan pake Ctrl+P. Wajib pake tombol `Print Legal PDF` biar gak blank & jadi Legal</p>
+  <!-- GANTI IFRAME JADI OBJECT -->
+  <object id="pdfViewer" type="application/pdf"></object> 
+  <p class="info">1. Klik tombol merah > 2. Di dialog print, pilih `Legal` > 3. `Skala: Sesuaikan`</p>
 </div>
 
 <script>
-  // === GANTI PUNYA LU DISINI SAJA ===
   const PUB_ID = '2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc';
-  const gidJan = '102046414'; // GID Lap.JAN26 - JANGAN DIUBAH
+  const gidJan = '102046414'; 
   
-  // JURUS TIPU GOOGLE: TAMBAHIN &rnd=BIAR RENDER ULANG JADI LEGAL
   function getPdfLink() {
-    const random = new Date().getTime(); // Angka ganti tiap detik
-    return `https://docs.google.com/spreadsheets/d/e/${PUB_ID}/pub?gid=${gidJan}&single=true&output=pdf&rnd=${random}`;
+    const random = new Date().getTime(); 
+    // KUNCI: LANGSUNG LINK PDF. TANPA viewer?embedded=true
+    return `https://docs.google.com/spreadsheets/d/e/${PUB_ID}/pub?gid=${gidJan}&single=true&output=pdf&rnd=${random}#toolbar=0&navpanes=0`; 
   }
   
-  const btnJan = document.getElementById('btn-jan');
   const btnPrint = document.getElementById('btn-print');
-  const viewer = document.getElementById('viewer');
+  const pdfViewer = document.getElementById('pdfViewer');
 
-  // TOMBOL 1: CUMA BUAT LIHAT PREVIEW
-  btnJan.addEventListener('click', () => {
-    const pdfUrlViewer = `https://docs.google.com/viewer?embedded=true&url=${encodeURIComponent(getPdfLink())}`;
-    viewer.src = pdfUrlViewer;
-    btnPrint.disabled = false; // Aktifin tombol print
-  });
+  // LANGSUNG LOAD PDF LEGAL KE OBJECT
+  pdfViewer.data = getPdfLink();
 
-  // TOMBOL 2: LANGSUNG PRINT PDF ASLI BIAR GAK BLANK
   btnPrint.addEventListener('click', () => {
-    const pdfAsli = getPdfLink(); // Ambil link baru lagi
-    const win = window.open(pdfAsli, '_blank');
-    if(win) {
-        setTimeout(() => { 
-            win.print(); // Auto munculin dialog print
-        }, 1500); // Kasih jeda 1.5 detik biar PDF ke-load
-    } else {
-        alert('Pop-up diblokir lur. Izinkan pop-up di browser dulu ya.');
-    }
+    // Buka PDF di tab baru biar printnya paling bersih
+    const win = window.open(getPdfLink(), '_blank'); 
+    setTimeout(() => { win.print(); }, 1500);
   });
 
 </script>
