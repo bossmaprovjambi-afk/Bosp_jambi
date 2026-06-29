@@ -1,51 +1,17 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #121212;
-  color: #fff;
-}
-
-/* Sidebar */
 .sidebar {
   width: 220px;
   height: 100vh;
   background: #1e1e1e;
   position: fixed;
   top: 0;
-  left: -220px; /* sembunyi */
+  left: -220px;
+  transition: left 0.3s ease;
   padding: 20px;
-  transition: left 0.3s ease; /* animasi slide-in */
   z-index: 999;
 }
 
-.sidebar.active {
-  left: 0;
-}
+.sidebar.active { left: 0; }
 
-.sidebar h2 {
-  margin: 0 0 20px;
-  text-align: center;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar ul li a {
-  display: block;
-  padding: 10px;
-  color: #ccc;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.sidebar ul li a:hover {
-  color: #00f7ff;
-  box-shadow: 0 0 10px #00f7ff;
-}
-
-/* Tombol hamburger */
 .toggle-btn {
   position: fixed;
   top: 15px;
@@ -54,10 +20,4 @@ body {
   cursor: pointer;
   color: #fff;
   z-index: 1000;
-}
-
-/* Konten utama */
-.content {
-  margin-left: 20px;
-  padding: 20px;
 }
