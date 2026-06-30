@@ -5,57 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard BOSP Reguler SMA Jambi 2026</title>
 <style>
-  :root{
-    --bg-dark:#0F172A; --bg-card:#1E293B; --border:#334155;
-    --text:#E2E8F0; --text-muted:#94A3B8; --green:#22C55E; --red:#F87171; --blue:#60A5FA;
-    --navy:#00182A; --gold:#C6A942; --blue-active:#EFF6FF; --blue-line:#2563EB;
-  }
+  :root{ --bg-dark:#0F172A; --bg-card:#1E293B; --border:#334155; --text:#E2E8F0; --text-muted:#94A3B8; --green:#22C55E; --red:#F87171; --blue:#60A5FA; --navy:#00182A;}
   *{box-sizing:border-box}
   body{margin:0; font-family: 'Segoe UI', Roboto, Arial, sans-serif; background:var(--bg-dark); color:var(--text); display:flex; min-height:100vh;}
-
-  /* ===== SIDEBAR PUTIH KIRI ===== */
-.sidebar{width:280px; background:#FFF; border-right:1px solid #E2E8F0; padding:20px 0; display:flex; flex-direction:column; flex-shrink:0; color:var(--navy);}
-.sidebar-head{text-align:center; padding:0 20px 20px; border-bottom:1px solid #F1F5F9; margin-bottom:16px;}
-.sidebar-head img{width:90px; height:auto; margin-bottom:12px;}
-.sidebar-head h2{font-size:15px; font-weight:800; color:var(--navy); margin:0; line-height:1.3; text-transform:uppercase;}
-.sidebar-head p{font-size:12px; color:#64748B; margin:4px 0 0;}
-.sidebar.form-wrap{padding:0 20px;}
-.sidebar label{font-size:12px; font-weight:600; color:#64748B; display:block; margin-bottom:6px; text-align:left;}
-.sidebar select{width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:8px; font-size:14px; background:#F1F5F9; color:var(--navy);}
-.sidebar.btn-sidebar{width:100%; padding:12px; border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; background:var(--navy); color:#FFF; margin-top:12px;}
-.sidebar hr{border:none; border-top:1px solid #E2E8F0; margin:20px 0;}
-
-  /* ===== KONTEN KAN TEMA GELAP ===== */
-.main{flex:1; padding:24px; overflow-y:auto;}
-.header{display:flex; align-items:center; gap:16px; margin-bottom:20px;}
-.header img{width:70px; height:auto;}
-.header h1{font-size:24px; margin:0; font-weight:700;}
-.header p{font-size:14px; color:var(--text-muted); margin:4px 0 0;}
-.header.btn-top{display:flex; gap:8px; margin-left:auto;}
-.btn-top button{padding:8px 14px; border:1px solid var(--border); background:var(--bg-card); color:var(--text); border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;}
-
-.stats{display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin:20px 0;}
-.stat-card{background:var(--bg-card); padding:16px; border-radius:12px; border:1px solid var(--border);}
-.stat-card.label{font-size:13px; color:var(--text-muted);}
-.stat-card.value{font-size:28px; font-weight:700; margin-top:4px;}
-.stat-card.value.green{color:var(--green);}.stat-card.value.red{color:var(--red);}.stat-card.value.blue{color:var(--blue);}
-
-.search-box input{width:100%; padding:12px; border:1px solid var(--border); background:var(--bg-card); color:var(--text); border-radius:8px; font-size:14px; margin:20px 0;}
-
-.table-wrap{background:var(--bg-card); border:1px solid var(--border); border-radius:12px; overflow-x:auto;}
-table{width:100%; border-collapse:collapse; font-size:13px;}
-thead th{padding:12px; text-align:left; font-weight:600; color:var(--text-muted); border-bottom:1px solid var(--border); font-size:12px; text-transform:uppercase;}
-tbody td{padding:12px; border-bottom:1px solid var(--border);}
-tbody tr:last-child td{border-bottom:none;}
-.status-dot{font-size:16px;}.status-dot.ok{color:var(--green);}.status-dot.no{color:var(--red);}
-
-  @media print{.sidebar,.header,.stats,.search-box{display:none} body{background:#FFF; color:#000}.main{padding:0}}
+ .sidebar{width:280px; background:#FFF; border-right:1px solid #E2E8F0; padding:20px 0; display:flex; flex-direction:column; flex-shrink:0; color:var(--navy);}
+ .sidebar-head{text-align:center; padding:0 20px 20px; border-bottom:1px solid #F1F5F9; margin-bottom:16px;}
+ .sidebar-head img{width:90px; height:auto; margin-bottom:12px;}
+ .sidebar-head h2{font-size:15px; font-weight:800; color:var(--navy); margin:0; line-height:1.3; text-transform:uppercase;}
+ .sidebar-head p{font-size:12px; color:#64748B; margin:4px 0 0;}
+ .sidebar.form-wrap{padding:0 20px;}
+ .sidebar label{font-size:12px; font-weight:600; color:#64748B; display:block; margin-bottom:6px; text-align:left;}
+ .sidebar input,.sidebar select{width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:8px; font-size:14px; background:#F1F5F9; color:var(--navy); margin-bottom:12px;}
+ .sidebar.btn-sidebar{width:100%; padding:12px; border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; background:var(--navy); color:#FFF;}
+ .main{flex:1; padding:24px; overflow-y:auto;}
+ .header{display:flex; align-items:center; gap:16px; margin-bottom:20px;}
+ .header img{width:70px; height:auto;}
+ .header h1{font-size:24px; margin:0; font-weight:700;}
+ .header p{font-size:14px; color:var(--text-muted); margin:4px 0 0;}
+ .header.btn-top{display:flex; gap:8px; margin-left:auto;}
+ .btn-top button{padding:8px 14px; border:1px solid var(--border); background:var(--bg-card); color:var(--text); border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;}
+ .stats{display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin:20px 0;}
+ .stat-card{background:var(--bg-card); padding:16px; border-radius:12px; border:1px solid var(--border);}
+ .stat-card.label{font-size:13px; color:var(--text-muted);}
+ .stat-card.value{font-size:28px; font-weight:700; margin-top:4px;}
+ .stat-card.value.green{color:var(--green);}.stat-card.value.red{color:var(--red);}.stat-card.value.blue{color:var(--blue);}
+ .search-box input{width:100%; padding:12px; border:1px solid var(--border); background:var(--bg-card); color:var(--text); border-radius:8px; font-size:14px; margin:20px 0;}
+ .table-wrap{background:var(--bg-card); border:1px solid var(--border); border-radius:12px; overflow-x:auto;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  thead th{padding:12px; text-align:left; font-weight:600; color:var(--text-muted); border-bottom:1px solid var(--border); font-size:12px; text-transform:uppercase;}
+  tbody td{padding:12px; border-bottom:1px solid var(--border);}
+ .status-dot{font-size:16px;}.status-dot.ok{color:var(--green);}.status-dot.no{color:var(--red);}
   @media (max-width: 900px){.sidebar{display:none}}
 </style>
 </head>
 <body>
 
-  <!-- ===== SIDEBAR KIRI PUTIH ===== -->
   <aside class="sidebar">
     <div class="sidebar-head">
       <img src="An8ip-Y5ZBWDzSiWOQM8Vm0oPok_379SHs3dDHBd-ILXhWD0NFbjTWkthMcp49D3BeN5E-TmtI9f7P6tcogY1201Mpsb_OkNxdo1QhtgiedRwREhGOo69SMA" alt="Logo Jambi">
@@ -65,24 +49,19 @@ tbody tr:last-child td{border-bottom:none;}
     <div class="form-wrap">
       <h3 style="font-size:16px; margin:0 0 12px;">Cetak Laporan Bulan</h3>
       <label for="npsn">Masukkan NPSN</label>
-      <input type="text" id="npsn" placeholder="10504558" style="width:100%; padding:10px; border:1px solid #CBD5E1; border-radius:8px; margin-bottom:12px;">
-
+      <input type="text" id="npsn" placeholder="10504558">
       <label for="bulan">Pilih Bulan Cetak</label>
       <select id="bulan">
         <option value="">-- Pilih Bulan --</option>
-        <option value="JAN26">Januari</option><option value="FEB26">Februari</option>
-        <option value="MAR26">Maret</option><option value="APR26">April</option>
-        <option value="MEI26">Mei</option><option value="JUN26">Juni</option>
-        <option value="JUL26">Juli</option><option value="AGT26">Agustus</option>
-        <option value="SEP26">September</option><option value="OKT26">Oktober</option>
-        <option value="NOV26">November</option><option value="DES26">Desember</option>
+        <option value="JAN26">Januari</option><option value="FEB26">Februari</option><option value="MAR26">Maret</option><option value="APR26">April</option>
+        <option value="MEI26">Mei</option><option value="JUN26">Juni</option><option value="JUL26">Juli</option><option value="AGT26">Agustus</option>
+        <option value="SEP26">September</option><option value="OKT26">Oktober</option><option value="NOV26">November</option><option value="DES26">Desember</option>
       </select>
       <button class="btn-sidebar" id="btnCek" onclick="cekDanCetak()">CETAK</button>
       <div id="alertBox" style="font-size:12px; margin-top:10px; display:none;"></div>
     </div>
   </aside>
 
-  <!-- ===== KONTEN KAN DASHBOARD ===== -->
   <main class="main">
     <div class="header">
       <img src="An8ip-Y5ZBWDzSiWOQM8Vm0oPok_379SHs3dDHBd-ILXhWD0NFbjTWkthMcp49D3BeN5E-TmtI9f7P6tcogY1201Mpsb_OkNxdo1QhtgiedRwREhGOo69SMA" alt="Logo">
@@ -96,21 +75,18 @@ tbody tr:last-child td{border-bottom:none;}
         <button>Lapor RKAS Awal</button>
       </div>
     </div>
-
     <div class="stats">
       <div class="stat-card"><div class="label">Total Sekolah</div><div class="value" id="totalSekolah">0</div></div>
       <div class="stat-card"><div class="label">Lengkap 12/12</div><div class="value green" id="lengkap">0</div></div>
       <div class="stat-card"><div class="label">Belum Lengkap</div><div class="value red" id="belum">0</div></div>
       <div class="stat-card"><div class="label">% Selesai</div><div class="value blue" id="persen">0%</div></div>
     </div>
-
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Cari NPSN, Nama Sekolah, atau Kabupaten...">
     </div>
-
     <div class="table-wrap">
       <table id="tabelSekolah">
-        <thead><tr><th>No</th><th>NPSN</th><th>Nama Sekolah</th><th>Status</th><th>Kabupaten</th><th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th><th>STATUS</th></tr></thead>
+        <thead><tr><th>No</th><th>NPSN</th><th>NAMA SEKOLAH</th><th>STATUS</th><th>KABUPATEN</th><th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th><th>STATUS</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -119,26 +95,42 @@ tbody tr:last-child td{border-bottom:none;}
 <script>
 const CSV_DATA_MASUK = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=102046414&single=true&output=csv';
 let dataSekolah = [];
+let COL_MAP = {}; // Peta nama kolom asli
 
 async function loadCSV(url){
   const res = await fetch(url); const text = await res.text(); const rows = text.trim().split('\n');
   const headers = rows[0].split(',').map(h => h.trim().replace(/"/g,''));
-  return rows.slice(1).map(r => { const values = r.split(','); let obj = {}; headers.forEach((h,i) => { obj[h] = values[i]? values[i].trim().replace(/"/g,'') : ''; }); return obj; });
+  
+  // ===== KUNCI: CARI NAMA KOLOM MIRIP =====
+  const findCol = (keys) => headers.find(h => keys.some(k => h.toLowerCase().includes(k)));
+  COL_MAP = {
+    npsn: findCol(['npsn']),
+    nama: findCol(['nama', 'sekolah']),
+    kab: findCol(['kabupaten', 'kab', 'kota']),
+    status: findCol(['status']),
+   ...Object.fromEntries(['JAN26','FEB26','MAR26','APR26','MEI26','JUN26','JUL26','AGT26','SEP26','OKT26','NOV26','DES26'].map(b => [b, headers.find(h => h.toUpperCase() === b)]))
+  };
+  console.log('Peta Kolom:', COL_MAP); // BUAT CEK
+
+  return rows.slice(1).map(r => {
+    const values = r.split(',');
+    let obj = {};
+    headers.forEach((h,i) => { obj[h] = values[i]? values[i].trim().replace(/"/g,'') : ''; });
+    return obj;
+  });
 }
 
-// ===== RENDER TABEL DASHBOARD =====
+function getVal(row, key){ return row[COL_MAP[key]] || ''; } // Ambil data pake peta
+
 function renderTabel(data){
-  const tbody = document.querySelector('#tabelSekolah tbody');
-  tbody.innerHTML = '';
-  let lengkap = 0;
+  const tbody = document.querySelector('#tabelSekolah tbody'); tbody.innerHTML = '';
+  let lengkap = 0; const bulan = ['JAN26','FEB26','MAR26','APR26','MEI26','JUN26','JUL26','AGT26','SEP26','OKT26','NOV26','DES26'];
   data.forEach((row, i) => {
-    // Hitung bulan terisi. Asumsi kolom JAN26, FEB26... ada isinya = sudah kirim
-    const bulan = ['JAN26','FEB26','MAR26','APR26','MEI26','JUN26','JUL26','AGT26','SEP26','OKT26','NOV26','DES26'];
-    let count = bulan.filter(b => row[b] && row[b]!== '').length;
+    let count = bulan.filter(b => getVal(row, b)).length;
     if(count === 12) lengkap++;
     const tr = `<tr>
-      <td>${i+1}</td><td>${row.NPSN}</td><td>${row['NAMA SEKOLAH']}</td><td>${row.STATUS || 'Negeri'}</td><td>${row.KABUPATEN}</td>
-      ${bulan.map(b => `<td><span class="status-dot ${row[b]? 'ok':'no'}">${row[b]? '✅':'⏳'}</span></td>`).join('')}
+      <td>${i+1}</td><td>${getVal(row, 'npsn')}</td><td>${getVal(row, 'nama')}</td><td>${getVal(row, 'status') || 'Negeri'}</td><td>${getVal(row, 'kab')}</td>
+      ${bulan.map(b => `<td><span class="status-dot ${getVal(row,b)? 'ok':'no'}">${getVal(row,b)? '✅':'⏳'}</span></td>`).join('')}
       <td>${count}/12</td>
     </tr>`;
     tbody.innerHTML += tr;
@@ -146,37 +138,32 @@ function renderTabel(data){
   document.getElementById('totalSekolah').textContent = data.length;
   document.getElementById('lengkap').textContent = lengkap;
   document.getElementById('belum').textContent = data.length - lengkap;
-  document.getElementById('persen').textContent = ((lengkap/data.length)*100).toFixed(1)+'%';
+  document.getElementById('persen').textContent = data.length? ((lengkap/data.length)*100).toFixed(1)+'%' : '0%';
 }
 
-// ===== LOGIC CETAK DARI SIDEBAR =====
-function showAlert(pesan, tipe='error'){
-  const box = document.getElementById('alertBox');
-  box.style.display = 'block'; box.style.color = tipe==='success'?'green':'red';
-  box.textContent = pesan;
-}
+function showAlert(pesan, tipe='error'){ const box = document.getElementById('alertBox'); box.style.display = 'block'; box.style.color = tipe==='success'?'#065F46':'#DC2626'; box.textContent = pesan; }
+
 async function cekDanCetak(){
   const npsnInput = document.getElementById('npsn').value.trim(); const bulan = document.getElementById('bulan').value; const btn = document.getElementById('btnCek');
   if(!npsnInput ||!bulan){ showAlert('NPSN dan Bulan wajib diisi lur!'); return; }
   btn.disabled = true; btn.textContent = 'CEK...';
   try{
     if(dataSekolah.length === 0){ dataSekolah = await loadCSV(CSV_DATA_MASUK); renderTabel(dataSekolah); }
-    const sekolah = dataSekolah.find(row => String(row.NPSN).trim() === npsnInput);
+    const sekolah = dataSekolah.find(row => String(getVal(row,'npsn')).trim() === npsnInput);
     if(!sekolah){ showAlert(`NPSN ${npsnInput} TIDAK TERDAFTAR.`); btn.disabled = false; btn.textContent = 'CETAK'; return; }
-    showAlert(`DITEMUKAN: ${sekolah['NAMA SEKOLAH']}. Siap cetak.`, 'success');
-    window.print(); // Nanti kita bikin template cetaknya
+    showAlert(`DITEMUKAN: ${getVal(sekolah,'nama')}. Siap cetak.`, 'success');
+    window.print();
   }catch(e){ showAlert('Gagal ambil data.'); console.error(e); }
   btn.disabled = false; btn.textContent = 'CETAK';
 }
 
-// ===== INIT =====
 (async () => {
   dataSekolah = await loadCSV(CSV_DATA_MASUK);
   renderTabel(dataSekolah);
   document.getElementById('lastUpdate').textContent = `Update terakhir: ${new Date().toLocaleString('id-ID')}`;
   document.getElementById('searchInput').oninput = e => {
     const q = e.target.value.toLowerCase();
-    const filtered = dataSekolah.filter(r => r.NPSN.includes(q) || r['NAMA SEKOLAH'].toLowerCase().includes(q) || r.KABUPATEN.toLowerCase().includes(q));
+    const filtered = dataSekolah.filter(r => getVal(r,'npsn').includes(q) || getVal(r,'nama').toLowerCase().includes(q) || getVal(r,'kab').toLowerCase().includes(q));
     renderTabel(filtered);
   }
 })();
