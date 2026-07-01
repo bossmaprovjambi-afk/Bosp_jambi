@@ -5,14 +5,14 @@
 <title>Dashboard BOSP SMA Jambi 2026</title>
 <style>
   :root{
-    --navy:#0A2947;--hijau:#10b981;--merah:#ef4444;--biru:#3b82f6;--kuning:#f59e0b;
-    --bg:#f4f7f9;--card:#ffffff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--shadow:0 8px 24px rgba(0,0,0,.06);
+    --navy:#0A2947;--hijau:#10b981;--merah:#ef4444;--biru:#3b82f6;--kuning:#f59e0b;--orange:#f97316;
+    --bg:#f4f7f9;--card:#ffffff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--shadow:0 4px 12px rgba(0,0,0,.06);
   }
   [data-theme="dark"]{
-    --bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--muted:#94a3b8;--border:#334155;--shadow:0 8px 24px rgba(0,0,0,.4);
+    --bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--muted:#94a3b8;--border:#334155;--shadow:0 4px 12px rgba(0,0,0,.4);
     --navy:#3b82f6;
   }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;transition:.3s}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;transition:.2s}
   body{display:flex;min-height:100vh;background:var(--bg);color:var(--text)}
   
 .sidebar{width:260px;background:var(--card);border-right:1px solid var(--border);padding:24px 20px;display:flex;flex-direction:column;gap:14px;flex-shrink:0;height:100vh;position:sticky;top:0}
@@ -23,7 +23,7 @@
 .menu{list-style:none;display:flex;flex-direction:column;gap:4px;margin-top:12px}
 .menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px}
 .menu a:hover{background:var(--border)}
-.menu a.active{background:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(59,130,246,.3)}
+.menu a.active{background:var(--navy);color:#fff}
 
 .main{flex:1;padding:28px;overflow-y:auto}
 .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
@@ -49,22 +49,30 @@
 .stat-belum.angka{color:var(--merah)}
 .stat-persen.angka{color:var(--biru)}
 
+/* FILTER BARU */
+.filter-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.search-box{flex:1;min-width:260px;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px}
+.search-box::placeholder{color:var(--muted)}
+.search-box:focus{border-color:var(--navy);outline:none;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+
   table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
   thead{position:sticky;top:0;z-index:10}
-  th{background:var(--border);padding:14px 10px;text-align:center;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  th{background:var(--border);padding:14px 10px;text-align:center;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
   th:first-child{border-radius:12px 0 0 12px}th:last-child{border-radius:0 12px 12px 0}
-  td{border-bottom:1px solid var(--border);padding:12px 10px;text-align:center}
+  td{border-bottom:1px solid var(--border);padding:12px 8px;text-align:center}
   tbody tr:last-child td{border-bottom:none}
   tbody tr:hover td{background:var(--bg)}
-  td.kiri{text-align:left;font-weight:600;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  td.kiri{text-align:left;font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ok{color:var(--hijau);font-weight:800;font-size:18px}
 .kosong{color:var(--border);font-size:18px}
-.status-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;display:inline-block}
-.status-aktif{background:var(--hijau)}.status-swasta{background:var(--kuning)}
-.wa-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--navy);color:#fff}
+.status-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;display:inline-block;min-width:60px}
+.status-negeri{background:var(--hijau)}.status-swasta{background:var(--orange)}
+.wa-badge{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--navy);color:#fff;display:flex;align-items:center;gap:6px;justify-content:center;min-width:160px}
+  [data-theme="dark"].wa-badge{background:#1e293b;border:1px solid var(--border)}
 .table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--border);border-radius:16px;background:var(--card)}
 .badge{background:var(--navy);color:#fff;padding:5px 12px;border-radius:8px;font-size:13px;font-weight:700}
 .page{display:none}.page.active{display:block}
+.tidak-ditemukan{text-align:center;padding:40px;color:var(--muted);font-weight:600}
   @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.sidebar{display:none}.main{padding:16px}}
 </style>
 </head>
@@ -103,6 +111,12 @@
           <div class="stat-card stat-belum"><div class="label">Belum Kirim</div><div class="angka" id="statBelum">0</div></div>
           <div class="stat-card stat-persen"><div class="label">Progress Kirim</div><div class="angka" id="statPersen">0%</div></div>
         </div>
+        
+        <!-- FILTER BARU DI SINI -->
+        <div class="filter-bar">
+          <input type="text" class="search-box" id="searchInput" placeholder="🔍 Cari NPSN, Nama Sekolah, atau Kabupaten...">
+        </div>
+
         <div class="table-wrap">
           <table id="tabelStatus">
             <thead><tr><th>No</th><th class="kiri">NPSN</th><th class="kiri" style="min-width:220px">Nama Sekolah</th><th>Status</th><th class="kiri">Kabupaten</th><th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th><th>WA</th></tr></thead>
@@ -115,6 +129,7 @@
 <script>
 const CSV_URL = "https://script.google.com/macros/s/AKfycbwMxmNRScZrparzArqIHwDS1GOJ08PoqbqmNgFdEU1L_A_ycR7HIGUA7Ics2BUjIGcD3w/exec";
 let dataSekolah = [];
+let dataFiltered = []; // DATA BUAT FILTER
 
 // THEME
 const btn=document.getElementById('themeBtn');
@@ -126,7 +141,9 @@ btn.onclick=()=>{const t=document.documentElement.getAttribute('data-theme')==='
 function updateClock(){const now=new Date();document.getElementById('jam').textContent=now.toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta'});document.getElementById('tanggal').textContent=now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Jakarta'});}
 setInterval(updateClock,1000);updateClock();
 document.querySelectorAll('.menu a').forEach(a=>{a.onclick=e=>{e.preventDefault();document.querySelectorAll('.menu a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(a.dataset.page).classList.add('active');}});
-const clean=(s)=>s.toLowerCase().replace(/[^a-z]/g,'').trim();
+
+const findHeader=(header,names)=>{for(let name of names){let idx=header.indexOf(name);if(idx>-1)return idx;}return -1;}
+const clean=(s)=>String(s||'').toLowerCase().replace(/[^a-z]/g,'').trim();
 
 async function loadData(){
   if(dataSekolah.length>0)return;
@@ -136,21 +153,36 @@ async function loadData(){
     const header=data[0].map(clean);
 
     const iNo=header.indexOf('no');const iNPSN=header.indexOf('npsn');const iNama=header.indexOf('namasekolah');
-    const iStatus=header.indexOf('status');const iKab=header.indexOf('kabupaten');const iWa=header.indexOf('statuskirim');
-    // KECAMATAN DIBUANG: gak dipake sama sekali
+    const iStatus=header.indexOf('status');const iKab=findHeader(header,['kabupaten','kabkota','kabkota']);const iWa=header.indexOf('statuskirim');
     const bulan={jan:header.indexOf('januari'),feb:header.indexOf('februari'),mar:header.indexOf('maret'),apr:header.indexOf('april'),mei:header.indexOf('mei'),jun:header.indexOf('juni'),jul:header.indexOf('juli'),agt:header.indexOf('agustus'),sep:header.indexOf('september'),okt:header.indexOf('oktober'),nov:header.indexOf('nopember'),des:header.indexOf('desember')};
 
     dataSekolah=data.slice(1).filter(r=>r[iNPSN]).map(r=>({
-      no:r[iNo]?.toString().trim()||'',npsn:r[iNPSN]?.toString().trim()||'-',nama:r[iNama]?.toString().trim()||'-', // Cuma ambil Nama Sekolah
-      status:r[iStatus]?.toString().trim()||'',kab:r?.toString().trim()||'-',wa:r[iWa]?.toString().trim()||'',
+      no:r[iNo]?.toString().trim()||'',npsn:r[iNPSN]?.toString().trim()||'-',nama:r[iNama]?.toString().trim()||'-',
+      status:r[iStatus]?.toString().trim()||'',kab:iKab>-1?r?.toString().trim():'-',wa:r[iWa]?.toString().trim()||'-',
       jan:bulan.jan>-1?r[bulan.jan].toString().trim():'',feb:bulan.feb>-1?r[bulan.feb].toString().trim():'',mar:bulan.mar>-1?r[bulan.mar].toString().trim():'',apr:bulan.apr>-1?r[bulan.apr].toString().trim():'',
       mei:bulan.mei>-1?r[bulan.mei].toString().trim():'',jun:bulan.jun>-1?r[bulan.jun].toString().trim():'',jul:bulan.jul>-1?r[bulan.jul].toString().trim():'',agt:bulan.agt>-1?r[bulan.agt].toString().trim():'',
       sep:bulan.sep>-1?r[bulan.sep].toString().trim():'',okt:bulan.okt>-1?r[bulan.okt].toString().trim():'',nov:bulan.nov>-1?r[bulan.nov].toString().trim():'',des:bulan.des>-1?r[bulan.des].toString().trim():''
     }));
+    dataFiltered=[...dataSekolah]; // COPY DATA AWAL
     renderTabel();
+
+    // LOGIC FILTER REALTIME
+    document.getElementById('searchInput').addEventListener('input',e=>{
+      const q=e.target.value.toLowerCase().trim();
+      if(q===''){dataFiltered=[...dataSekolah];}
+      else{
+        dataFiltered=dataSekolah.filter(s=>
+          s.npsn.includes(q) || 
+          s.nama.toLowerCase().includes(q) || 
+          s.kab.toLowerCase().includes(q)
+        );
+      }
+      renderTabel(); // RENDER ULANG PAKAI DATA FILTERED
+    });
+
   }catch(e){
     console.error('ERROR:',e);
-    document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="18" style="color:var(--merah)">❌ Gagal load. Cek Console F12</td></tr>`
+    document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="18" style="color:var(--merah)">❌ Gagal load data</td></tr>`
   }
 }
 
@@ -163,13 +195,21 @@ function renderTabel(){
   document.getElementById('statSudah').textContent=sudah;
   document.getElementById('statBelum').textContent=belum;
   document.getElementById('statPersen').textContent=persen+'%';
+  
   const body=document.querySelector('#tabelStatus tbody');
-  body.innerHTML=dataSekolah.map(s=>`<tr>
-    <td>${s.no}</td><td class="kiri">${s.npsn}</td><td class="kiri" title="${s.nama}">${s.nama}</td> // title biar hover full
-    <td><span class="status-badge ${s.status.toLowerCase().includes('negeri')?'status-aktif':'status-swasta'}">${s.status||'-'}</span></td>
+  if(dataFiltered.length===0){
+    body.innerHTML=`<tr><td colspan="18" class="tidak-ditemukan">😕 Data tidak ditemukan</td></tr>`;
+    return;
+  }
+  body.innerHTML=dataFiltered.map(s=>`
+  <tr>
+    <td>${s.no}</td>
+    <td class="kiri">${s.npsn}</td>
+    <td class="kiri" title="${s.nama}">${s.nama}</td>
+    <td><span class="status-badge ${s.status.toLowerCase().includes('negeri')?'status-negeri':'status-swasta'}">${s.status||'-'}</span></td>
     <td class="kiri">${s.kab}</td>
     ${['jan','feb','mar','apr','mei','jun','jul','agt','sep','okt','nov','des'].map(m=>`<td>${s[m]&&s[m]!=='BELUM KIRIM'?'<span class="ok">✓</span>':'<span class="kosong">○</span>'}</td>`).join('')}
-    <td><span class="wa-badge">${s.wa||'-'}</span></td>
+    <td><span class="wa-badge">⚠️ ${s.wa}</span></td>
   </tr>`).join('');
 }
 loadData();
