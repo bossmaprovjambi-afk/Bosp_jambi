@@ -9,8 +9,10 @@
   body{display:flex;min-height:100vh;background:var(--abu);color:var(--teks)}
 .sidebar{width:270px;background:#fff;border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:14px;flex-shrink:0;height:100vh;position:sticky;top:0}
 .sidebar.logo{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--sage)}
-.sidebar.logo img{width:36px!important;height:36px!important;max-width:36px!important;max-height:36px!important;object-fit:contain;border-radius:8px;box-shadow:0 2px 8px rgba(10,41,71,.15);background:#fff;flex-shrink:0;display:block} /* KUNCI 36PX */
+.sidebar.logo img{width:36px!important;height:36px!important;max-width:36px!important;max-height:36px!important;object-fit:contain;border-radius:8px;box-shadow:0 2px 8px rgba(10,41,71,.15);background:#fff;flex-shrink:0;display:block}
+.sidebar.logo.judul{display:flex;flex-direction:column;gap:2px} /* WRAPPER TEKS */
 .sidebar.logo h2{font-size:14px;font-weight:800;line-height:1.3;color:var(--navy)}
+.sidebar.logo p{font-size:12px;font-weight:400;line-height:1.3;color:#475569} /* TEKS KECIL GAK BOLD */
 .menu{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px;overflow-y:auto}
 .menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:#475569;font-weight:600;font-size:14px;transition:.2s}
 .menu a:hover{background:var(--beige);color:var(--navy);transform:translateX(4px)}
@@ -26,10 +28,11 @@ input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 
 .btn-primary{background:linear-gradient(180deg,var(--coklat),var(--coklat-hover));color:#fff;border:none;padding:12px 22px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 var(--coklat-hover)}
 .btn-primary:hover{transform:translateY(-2px)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{border:1px solid var(--sage);padding:12px 8px;text-align:center}
+th,td{border:1px solid var(--sage);padding:12px 8px;text-align:center;white-space:nowrap}
 th{background:var(--beige);position:sticky;top:0;color:var(--navy);font-weight:800}
 td.kiri{text-align:left;font-weight:600}
 .ok{color:var(--coklat);font-weight:700}
+.kosong{color:#94a3b8}
 .table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--sage);border-radius:14px}
 @media(max-width:900px){body{flex-direction:column}.sidebar{width:100%;height:auto;position:relative}.menu{flex-direction:row;overflow-x:auto}}
 </style>
@@ -37,8 +40,11 @@ td.kiri{text-align:left;font-weight:600}
 <body>
   <aside class="sidebar">
     <div class="logo">
-      <img src="https://i.ibb.co.com/ppSq2Ly/logo-jambi.png" alt="Logo Sepucuk Jambi"> <!-- UDAH GUE GANTI PAKE LINK LU LUR -->
-      <h2>Dinas Pendidikan Provinsi Jambi<br>Bidang Pembinaan SMA</h2>
+      <img src="https://i.ibb.co.com/ppSq2Ly/logo-jambi.png" alt="Logo Sepucuk Jambi">
+      <div class="judul"> <!-- DIBUNGKUS BIAR RAPINYA KEJAGA -->
+        <h2>Dinas Pendidikan<br>Provinsi Jambi</h2>
+        <p>Bidang Pembinaan SMA</p> <!-- TEKS BARU, KECIL GAK BOLD -->
+      </div>
     </div>
     <ul class="menu">
       <li><a href="#" class="active" data-page="status">📊 Status Kirim</a></li>
@@ -61,8 +67,9 @@ td.kiri{text-align:left;font-weight:600}
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ17qZcvWRGHo65k8CHYCVrt5AyqBP93CDWitjoxNddLkT85VXbqN19xkOOd3CEF5yad4l41Twpj-hG/pub?gid=102046414&output=csv";
 let dataSekolah = [];
 document.querySelectorAll('.menu a').forEach(a=>{a.onclick=e=>{e.preventDefault();document.querySelectorAll('.menu a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(a.dataset.page).classList.add('active');window.scrollTo(0,0)}});
-async function loadData(){if(dataSekolah.length>0)return;try{const res=await fetch(CSV_URL);const txt=await res.text();const[header,...rows]=txt.trim().split('\n').map(r=>r.split(',').map(c=>c.trim()));const idx=Object.fromEntries(header.map((h,i)=>[h.toUpperCase().trim(),i]));dataSekolah=rows.map(r=>({npsn:r[idx['NPSN']]||'',nama:r[idx['NAMA SEKOLAH']]||'',kab:r[idx['KABUPATEN']]||'',jan:r[idx['JAN26']]||'',feb:r[idx['FEB26']]||'',mar:r[idx['MAR26']]||'',apr:r[idx['APR26']]||'',mei:r[idx['MEI26']]||'',jun:r[idx['JUN26']]||'',jul:r[idx['JUL26']]||'',agt:r[idx['AGT26']]||'',sep:r[idx['SEP26']]||'',okt:r[idx['OKT26']]||'',nov:r[idx['NOV26']]||'',des:r[idx['DES26']]||''}));renderTabel()}catch(e){document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="16">Gagal load data. Cek link CSV & Publish to web.</td></tr>`}}
-function renderTabel(){document.getElementById('totalSekolah').textContent=dataSekolah.length;const body=document.querySelector('#tabelStatus tbody');if(dataSekolah.length===0)return body.innerHTML=`<tr><td colspan="16">Data kosong</td></tr>`;body.innerHTML=dataSekolah.map((s,i)=>`<tr><td>${i+1}</td><td class="kiri">${s.npsn}</td><td class="kiri">${s.nama}</td><td class="kiri">${s.kab}</td>${['jan','feb','mar','apr','mei','jun','jul','agt','sep','okt','nov','des'].map(m=>`<td>${s[m]?'<span class="ok">✅</span>':'<span class="kosong">⏳</span>'}</td>`).join('')}</tr>`).join('')}
+const findIdx=(header,names)=>{const h=header.map(x=>(x||'').toString().trim().toUpperCase());for(const n of names){const i=h.indexOf(n.toUpperCase().trim());if(i>-1)return i}return -1};
+async function loadData(){if(dataSekolah.length>0)return;try{const res=await fetch(CSV_URL);const txt=await res.text();const rows=txt.trim().split('\n').map(r=>r.split(','));const header=rows[0];const iNPSN=findIdx(header,['NPSN']);const iNama=findIdx(header,['NAMA SEKOLAH','NAMA','SEKOLAH']);const iKab=findIdx(header,['KABUPATEN','KOTA','KAB/KOTA']);const iBulan={'JAN26':findIdx(header,['JAN26','JAN']),'FEB26':findIdx(header,['FEB26','FEB']),'MAR26':findIdx(header,['MAR26','MAR']),'APR26':findIdx(header,['APR26','APR']),'MEI26':findIdx(header,['MEI26','MEI','MAY']),'JUN26':findIdx(header,['JUN26','JUN']),'JUL26':findIdx(header,['JUL26','JUL']),'AGT26':findIdx(header,['AGT26','AGS26','AGU26','AUG']),'SEP26':findIdx(header,['SEP26','SEP']),'OKT26':findIdx(header,['OKT26','OCT']),'NOV26':findIdx(header,['NOV26','NOV']),'DES26':findIdx(header,['DES26','DEC'])};dataSekolah=rows.slice(1).map(r=>({npsn:iNPSN>-1?r[iNPSN].trim():'',nama:iNama>-1?r[iNama].trim():'',kab:iKab>-1?r[iKab].trim():'',jan:iBulan.JAN26>-1?r[iBulan.JAN26].trim():'',feb:iBulan.FEB26>-1?r[iBulan.FEB26].trim():'',mar:iBulan.MAR26>-1?r[iBulan.MAR26].trim():'',apr:iBulan.APR26>-1?r[iBulan.APR26].trim():'',mei:iBulan.MEI26>-1?r[iBulan.MEI26].trim():'',jun:iBulan.JUN26>-1?r[iBulan.JUN26].trim():'',jul:iBulan.JUL26>-1?r[iBulan.JUL26].trim():'',agt:iBulan.AGT26>-1?r[iBulan.AGT26].trim():'',sep:iBulan.SEP26>-1?r[iBulan.SEP26].trim():'',okt:iBulan.OKT26>-1?r[iBulan.OKT26].trim():'',nov:iBulan.NOV26>-1?r[iBulan.NOV26].trim():'',des:iBulan.DES26>-1?r[iBulan.DES26].trim():''}));renderTabel()}catch(e){console.error(e);document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="16">Gagal load data. Cek link CSV & Publish to web.</td></tr>`}}
+function renderTabel(){document.getElementById('totalSekolah').textContent=dataSekolah.length;const body=document.querySelector('#tabelStatus tbody');if(dataSekolah.length===0)return body.innerHTML=`<tr><td colspan="16">Data kosong</td></tr>`;body.innerHTML=dataSekolah.map((s,i)=>`<tr><td>${i+1}</td><td class="kiri">${s.npsn||'-'}</td><td class="kiri">${s.nama||'-'}</td><td class="kiri">${s.kab||'-'}</td>${['jan','feb','mar','apr','mei','jun','jul','agt','sep','okt','nov','des'].map(m=>`<td>${s[m]?'<span class="ok">✅</span>':'<span class="kosong">⌛</span>'}</td>`).join('')}</tr>`).join('')}
 document.getElementById('btnCetak').onclick=()=>{const npsn=document.getElementById('npsnBku').value.trim();const bulan=document.getElementById('bulanBku').value;const info=document.getElementById('infoBku');if(!npsn||!bulan)return info.textContent='Isi NPSN dan Bulan dulu lur.';const sekolah=dataSekolah.find(s=>s.npsn===npsn);if(!sekolah)return info.textContent='NPSN tidak ditemukan di data.';if(!sekolah[bulan.toLowerCase()])return info.textContent=`Data bulan ${bulan} belum diisi ⏳`;info.textContent=`Data ditemukan ✅ Siap cetak untuk ${sekolah.nama}`;alert(`Nanti buka PDF untuk ${sekolah.nama} bulan ${bulan}`)}
 loadData();
 </script>
