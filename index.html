@@ -5,44 +5,41 @@
 <link rel="icon" href="favicon.ico">
 <title>Dashboard BOSP SMA Jambi 2026</title>
 <style>
-  :root{--navy:#0A2947;--beige:#F5EADF;--sage:#D1D7C5;--coklat:#8B5A2B;--coklat-hover:#6f4822;--abu:#f8f9fa;--border:#e5e7eb;--teks:#1e293b;}
+  :root{--navy:#0A2947;--beige:#F5EADF;--sage:#D1D7C5;--coklat:#8B5A2B;--hijau:#16a34a;--merah:#dc2626;}
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
-  body{display:flex;min-height:100vh;background:var(--abu);color:var(--teks)}
-.sidebar{width:270px;background:#fff;border-right:1px solid var(--border);padding:24px 20px;display:flex;flex-direction:column;gap:14px;flex-shrink:0;height:100vh;position:sticky;top:0}
-.sidebar.logo{display:flex;flex-direction:column;align-items:center;gap:12px;padding-bottom:20px;border-bottom:1px solid var(--sage);text-align:center} /* CENTER TOTAL */
-.sidebar.logo img{width:48px!important;height:48px!important;object-fit:contain;background:#fff} /* KECILIN JADI 48PX */
-.sidebar.logo.judul{display:flex;flex-direction:column;gap:3px}
+  body{display:flex;min-height:100vh;background:#f8f9fa;color:#1e293b}
+.sidebar{width:270px;background:#fff;border-right:1px solid var(--sage);padding:24px 20px;display:flex;flex-direction:column;gap:14px;flex-shrink:0;height:100vh;position:sticky;top:0}
+.sidebar.logo{display:flex;flex-direction:column;align-items:center;gap:12px;padding-bottom:20px;border-bottom:1px solid var(--sage);text-align:center}
+.sidebar.logo img{width:48px;height:48px;object-fit:contain}
 .sidebar.logo h2{font-size:15px;font-weight:800;line-height:1.3;color:var(--navy)}
-.sidebar.logo p{font-size:12px;font-weight:400;line-height:1.3;color:#475569}
-.menu{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:12px;overflow-y:auto}
-.menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:#475569;font-weight:600;font-size:14px;transition:.2s}
-.menu a:hover{background:var(--beige);color:var(--navy)}
-.menu a.active{background:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(10,41,71,.25)}
+.sidebar.logo p{font-size:12px;font-weight:400;color:#475569}
+.menu{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:#475569;font-weight:600;font-size:14px}
+.menu a.active{background:var(--navy);color:#fff}
 .main{flex:1;padding:28px;overflow-y:auto;background:#fff}
-.page{display:none}.page.active{display:block;animation:fade.3s}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
-.card{background:#fff;border:1px solid var(--sage);border-radius:18px;padding:24px;box-shadow:0 6px 24px rgba(10,41,71,.05)}
-.card h3{font-size:18px;margin-bottom:18px;font-weight:800;color:var(--navy)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;align-items:end}
-input,select{width:100%;padding:12px 14px;border:1.5px solid var(--sage);border-radius:12px;font-size:14px}
-input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(10,41,71,.1)}
-.btn-primary{background:linear-gradient(180deg,var(--coklat),var(--coklat-hover));color:#fff;border:none;padding:12px 22px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 var(--coklat-hover)}
-.btn-primary:hover{transform:translateY(-2px)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{border:1px solid var(--sage);padding:12px 8px;text-align:center;white-space:nowrap}
+.page{display:none}.page.active{display:block}
+.card{background:#fff;border:1px solid var(--sage);border-radius:18px;padding:24px;box-shadow:0 4px 12px rgba(0,0,0,.04)}
+.card h3{font-size:18px;margin-bottom:8px;font-weight:800;color:var(--navy)}
+.card p.sub{color:#64748b;font-size:14px;margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{border:1px solid var(--sage);padding:8px 6px;text-align:center;white-space:nowrap}
 th{background:var(--beige);position:sticky;top:0;color:var(--navy);font-weight:800}
 td.kiri{text-align:left;font-weight:600}
-.ok{color:var(--coklat);font-weight:700}
-.kosong{color:#94a3b8}
-.table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--sage);border-radius:14px}
-@media(max-width:900px){body{flex-direction:column}.sidebar{width:100%;height:auto;position:relative}.menu{flex-direction:row;overflow-x:auto}}
+.ok{color:var(--hijau);font-weight:700;font-size:15px}
+.kosong{color:#cbd5e1;font-size:15px}
+.status-badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;color:#fff}
+.status-aktif{background:var(--hijau)}
+.status-tidak{background:var(--merah)}
+.wa-badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;background:var(--navy);color:#fff}
+.table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--sage);border-radius:14px;max-height:65vh}
+.badge{background:var(--navy);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:700}
 </style>
 </head>
 <body>
   <aside class="sidebar">
     <div class="logo">
-      <img src="https://i.ibb.co.com/ppSq2Ly/logo-jambi.png" alt="Logo Sepucuk Jambi">
-      <div class="judul">
+      <img src="https://i.ibb.co.com/ppSq2Ly/logo-jambi.png" alt="Logo">
+      <div>
         <h2>Dinas Pendidikan<br>Provinsi Jambi</h2>
         <p>Bidang Pembinaan SMA</p>
       </div>
@@ -52,26 +49,108 @@ td.kiri{text-align:left;font-weight:600}
       <li><a href="#" data-page="bku">📄 Laporan BKU</a></li>
       <li><a href="#" data-page="rkas">📘 Rkas Awal</a></li>
       <li><a href="#" data-page="stats">📈 Stats</a></li>
-      <li><a href="#" data-page="rekap">🗓️ Rekap Laporan Bulan</a></li>
-      <li><a href="#" data-page="belanja">💰 Belanja BOSP</a></li>
+      <li><a href="#" data-page="rekap">🗓️ Rekap</a></li>
+      <li><a href="#" data-page="belanja">💰 Belanja</a></li>
     </ul>
   </aside>
   <main class="main">
-    <section id="status" class="page active"><div class="card"><h3>📊 Status Kirim Laporan BOSP SMA 2026</h3><p>Total Sekolah: <b id="totalSekolah">0</b></p><div class="table-wrap"><table id="tabelStatus"><thead><tr><th>No</th><th class="kiri">NPSN</th><th class="kiri">NAMA SEKOLAH</th><th class="kiri">KABUPATEN</th><th>JAN</th><th>FEB</th><th>MAR</th><th>APR</th><th>MEI</th><th>JUN</th><th>JUL</th><th>AGT</th><th>SEP</th><th>OKT</th><th>NOV</th><th>DES</th></tr></thead><tbody><tr><td colspan="16">Loading data...</td></tr></tbody></table></div></div></section>
-    <section id="bku" class="page"><div class="card" style="max-width:720px;margin:auto"><h3>📄 Cetak Laporan BKU Bulanan</h3><div class="form-grid"><div><label style="font-weight:600;font-size:13px;margin-bottom:6px;display:block">NPSN</label><input id="npsnBku" placeholder="Masukkan NPSN"></div><div><label style="font-weight:600;font-size:13px;margin-bottom:6px;display:block">Bulan</label><select id="bulanBku"><option value="">Pilih Bulan</option><option value="JAN26">Januari</option><option value="FEB26">Februari</option><option value="MAR26">Maret</option><option value="APR26">April</option><option value="MEI26">Mei</option><option value="JUN26">Juni</option><option value="JUL26">Juli</option><option value="AGT26">Agustus</option><option value="SEP26">September</option><option value="OKT26">Oktober</option><option value="NOV26">November</option><option value="DES26">Desember</option></select></div><button class="btn-primary" id="btnCetak">🔍 CEK & CETAK</button></div><p id="infoBku" style="margin-top:14px;font-size:13px;color:#64748b"></p></div></section>
-    <section id="rkas" class="page"><div class="card"><h3>📘 Rkas Awal</h3><p>Form Rkas akan ditaruh di sini.</p></div></section>
-    <section id="stats" class="page"><div class="card"><h3>📈 Stats</h3><p>Grafik statistik akan ditaruh di sini.</p></div></section>
-    <section id="rekap" class="page"><div class="card"><h3>🗓️ Rekap Laporan Bulan</h3><p>Rekap per bulan semua sekolah akan di sini.</p></div></section>
-    <section id="belanja" class="page"><div class="card"><h3>💰 Belanja BOSP</h3><p>Form input dan rekap belanja BOSP di sini.</p></div></section>
+    <section id="status" class="page active">
+      <div class="card">
+        <h3>📊 Status Kirim Laporan BOSP SMA 2026</h3>
+        <p class="sub">Total Sekolah: <span class="badge" id="totalSekolah">0</span></p>
+        <div class="table-wrap">
+          <table id="tabelStatus">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th class="kiri">NPSN</th>
+                <th class="kiri" style="min-width:180px">Nama Sekolah</th>
+                <th>Status</th>
+                <th class="kiri">Kabupaten</th>
+                <th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th>
+                <th>Status Kirim WA</th>
+              </tr>
+            </thead>
+            <tbody><tr><td colspan="18">⏳ Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section id="bku" class="page"><div class="card"><h3>📄 Laporan BKU</h3></div></section>
+    <section id="rkas" class="page"><div class="card"><h3>📘 Rkas Awal</h3></div></section>
+    <section id="stats" class="page"><div class="card"><h3>📈 Stats</h3></div></section>
+    <section id="rekap" class="page"><div class="card"><h3>🗓️ Rekap</h3></div></section>
+    <section id="belanja" class="page"><div class="card"><h3>💰 Belanja</h3></div></section>
   </main>
 <script>
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ17qZcvWRGHo65k8CHYCVrt5AyqBP93CDWitjoxNddLkT85VXbqN19xkOOd3CEF5yad4l41Twpj-hG/pub?gid=102046414&output=csv";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=147011660&single=true&output=csv";
 let dataSekolah = [];
-document.querySelectorAll('.menu a').forEach(a=>{a.onclick=e=>{e.preventDefault();document.querySelectorAll('.menu a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(a.dataset.page).classList.add('active');window.scrollTo(0,0)}});
-const findIdx=(header,names)=>{const h=header.map(x=>(x||'').toString().trim().toUpperCase());for(const n of names){const i=h.indexOf(n.toUpperCase().trim());if(i>-1)return i}return -1};
-async function loadData(){if(dataSekolah.length>0)return;try{const res=await fetch(CSV_URL);const txt=await res.text();const rows=txt.trim().split('\n').map(r=>r.split(','));const header=rows[0];const iNPSN=findIdx(header,['NPSN']);const iNama=findIdx(header,['NAMA SEKOLAH','NAMA','SEKOLAH']);const iKab=findIdx(header,['KABUPATEN','KOTA','KAB/KOTA']);const iBulan={'JAN26':findIdx(header,['JAN26','JAN']),'FEB26':findIdx(header,['FEB26','FEB']),'MAR26':findIdx(header,['MAR26','MAR']),'APR26':findIdx(header,['APR26','APR']),'MEI26':findIdx(header,['MEI26','MEI','MAY']),'JUN26':findIdx(header,['JUN26','JUN']),'JUL26':findIdx(header,['JUL26','JUL']),'AGT26':findIdx(header,['AGT26','AGS26','AGU26','AUG']),'SEP26':findIdx(header,['SEP26','SEP']),'OKT26':findIdx(header,['OKT26','OCT']),'NOV26':findIdx(header,['NOV26','NOV']),'DES26':findIdx(header,['DES26','DEC'])};dataSekolah=rows.slice(1).map(r=>({npsn:iNPSN>-1?r[iNPSN].trim():'',nama:iNama>-1?r[iNama].trim():'',kab:iKab>-1?r.trim():'',jan:iBulan.JAN26>-1?r[iBulan.JAN26].trim():'',feb:iBulan.FEB26>-1?r[iBulan.FEB26].trim():'',mar:iBulan.MAR26>-1?r[iBulan.MAR26].trim():'',apr:iBulan.APR26>-1?r[iBulan.APR26].trim():'',mei:iBulan.MEI26>-1?r[iBulan.MEI26].trim():'',jun:iBulan.JUN26>-1?r[iBulan.JUN26].trim():'',jul:iBulan.JUL26>-1?r[iBulan.JUL26].trim():'',agt:iBulan.AGT26>-1?r[iBulan.AGT26].trim():'',sep:iBulan.SEP26>-1?r[iBulan.SEP26].trim():'',okt:iBulan.OKT26>-1?r[iBulan.OKT26].trim():'',nov:iBulan.NOV26>-1?r[iBulan.NOV26].trim():'',des:iBulan.DES26>-1?r[iBulan.DES26].trim():''}));renderTabel()}catch(e){console.error(e);document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="16">Gagal load data. Cek link CSV & Publish to web.</td></tr>`}}
-function renderTabel(){document.getElementById('totalSekolah').textContent=dataSekolah.length;const body=document.querySelector('#tabelStatus tbody');if(dataSekolah.length===0)return body.innerHTML=`<tr><td colspan="16">Data kosong</td></tr>`;body.innerHTML=dataSekolah.map((s,i)=>`<tr><td>${i+1}</td><td class="kiri">${s.npsn||'-'}</td><td class="kiri">${s.nama||'-'}</td><td class="kiri">${s.kab||'-'}</td>${['jan','feb','mar','apr','mei','jun','jul','agt','sep','okt','nov','des'].map(m=>`<td>${s[m]?'<span class="ok">✅</span>':'<span class="kosong">⌛</span>'}</td>`).join('')}</tr>`).join('')}
-document.getElementById('btnCetak').onclick=()=>{const npsn=document.getElementById('npsnBku').value.trim();const bulan=document.getElementById('bulanBku').value;const info=document.getElementById('infoBku');if(!npsn||!bulan)return info.textContent='Isi NPSN dan Bulan dulu lur.';const sekolah=dataSekolah.find(s=>s.npsn===npsn);if(!sekolah)return info.textContent='NPSN tidak ditemukan di data.';if(!sekolah[bulan.toLowerCase()])return info.textContent=`Data bulan ${bulan} belum diisi ⏳`;info.textContent=`Data ditemukan ✅ Siap cetak untuk ${sekolah.nama}`;alert(`Nanti buka PDF untuk ${sekolah.nama} bulan ${bulan}`)}
+
+document.querySelectorAll('.menu a').forEach(a=>{a.onclick=e=>{e.preventDefault();document.querySelectorAll('.menu a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(a.dataset.page).classList.add('active');}});
+
+const clean=(s)=>s.toLowerCase().replace(/^[a-z]\./,'').trim();
+
+async function loadData(){
+  if(dataSekolah.length>0)return;
+  try{
+    const res=await fetch(CSV_URL+'&t='+Date.now());
+    const txt=await res.text();
+    const rows=txt.trim().split('\n').map(r=>r.split(','));
+    const header=rows[0].map(clean);
+
+    const iNo=header.indexOf('no');
+    const iNPSN=header.indexOf('npsn');
+    const iNama=header.indexOf('nama sekolah');
+    const iStatus=header.indexOf('status');
+    const iKab=header.indexOf('kabupaten');
+    const iWa=header.indexOf('status kirim');
+    const bulan={
+      jan:header.indexOf('januari'),
+      feb:header.indexOf('februari'),
+      mar:header.indexOf('maret'),
+      apr:header.indexOf('april'),
+      mei:header.indexOf('mei'),
+      jun:header.indexOf('juni'),
+      jul:header.indexOf('juli'),
+      agt:header.indexOf('agustus'),
+      sep:header.indexOf('september'),
+      okt:header.indexOf('oktober'),
+      nov:header.indexOf('nopember'),
+      des:header.indexOf('desember')
+    };
+
+    dataSekolah=rows.slice(1).filter(r=>r[iNPSN]).map(r=>({
+      no:r[iNo]?.trim()||'',
+      npsn:r[iNPSN]?.trim()||'-',
+      nama:r[iNama]?.trim()||'-',
+      status:r[iStatus]?.trim()||'',
+      kab:r?.trim()||'-',
+      wa:r[iWa]?.trim()||'',
+      jan:bulan.jan>-1?r[bulan.jan].trim():'',feb:bulan.feb>-1?r[bulan.feb].trim():'',mar:bulan.mar>-1?r[bulan.mar].trim():'',apr:bulan.apr>-1?r[bulan.apr].trim():'',
+      mei:bulan.mei>-1?r[bulan.mei].trim():'',jun:bulan.jun>-1?r[bulan.jun].trim():'',jul:bulan.jul>-1?r[bulan.jul].trim():'',agt:bulan.agt>-1?r[bulan.agt].trim():'',
+      sep:bulan.sep>-1?r[bulan.sep].trim():'',okt:bulan.okt>-1?r[bulan.okt].trim():'',nov:bulan.nov>-1?r[bulan.nov].trim():'',des:bulan.des>-1?r[bulan.des].trim():''
+    }));
+    renderTabel();
+  }catch(e){
+    console.error(e);
+    document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="18" style="color:red">❌ Gagal load data</td></tr>`
+  }
+}
+
+function renderTabel(){
+  document.getElementById('totalSekolah').textContent=dataSekolah.length;
+  const body=document.querySelector('#tabelStatus tbody');
+  body.innerHTML=dataSekolah.map(s=>`
+    <tr>
+      <td>${s.no}</td>
+      <td class="kiri">${s.npsn}</td>
+      <td class="kiri">${s.nama}</td>
+      <td><span class="status-badge ${s.status.toLowerCase().includes('aktif')?'status-aktif':'status-tidak'}">${s.status||'-'}</span></td>
+      <td class="kiri">${s.kab}</td>
+      ${['jan','feb','mar','apr','mei','jun','jul','agt','sep','okt','nov','des'].map(m=>`<td>${s[m]?'<span class="ok">✓</span>':'<span class="kosong">○</span>'}</td>`).join('')}
+      <td><span class="wa-badge">${s.wa||'-'}</span></td>
+    </tr>`).join('');
+}
 loadData();
 </script>
 </body>
