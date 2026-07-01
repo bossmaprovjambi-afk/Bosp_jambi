@@ -19,13 +19,16 @@
 .main{flex:1;padding:28px;overflow-y:auto;background:#fff}
 .page{display:none}.page.active{display:block}
 .card{background:#fff;border:1px solid var(--sage);border-radius:18px;padding:24px;box-shadow:0 4px 12px rgba(0,0,0,.04)}
-.card h3{font-size:18px;margin-bottom:8px;font-weight:800;color:var(--navy)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:10px}
+.card h3{font-size:18px;font-weight:800;color:var(--navy)}
+.clock{font-size:12px;color:#64748b;font-weight:600;text-align:right}
+.clock #jam{font-size:16px;font-weight:800;color:var(--navy)}
 .card p.sub{color:#64748b;font-size:14px;margin-bottom:18px}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
 .stat-card{border:1px solid var(--sage);border-radius:14px;padding:16px;text-align:center;background:#fff}
 .stat-card.angka{font-size:28px;font-weight:800;margin-bottom:4px}
 .stat-card.label{font-size:12px;color:#64748b;font-weight:600}
-.stat-total{border-color:var(--navy);background:var(--navy);color:#fff}
+.stat-total{border-color:var(--navy);background:var(--navy);color:#fff}.stat-total.label{color:#fff}
 .stat-sudah{border-color:var(--hijau);color:var(--hijau)}
 .stat-belum{border-color:var(--merah);color:var(--merah)}
 .stat-persen{border-color:var(--biru);color:var(--biru)}
@@ -36,8 +39,7 @@ td.kiri{text-align:left;font-weight:600}
 .ok{color:var(--hijau);font-weight:700;font-size:15px}
 .kosong{color:#cbd5e1;font-size:15px}
 .status-badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;color:#fff}
-.status-aktif{background:var(--hijau)}
-.status-tidak{background:var(--merah)}
+.status-aktif{background:var(--hijau)}.status-tidak{background:var(--merah)}
 .wa-badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;background:var(--navy);color:#fff}
 .table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--sage);border-radius:14px;max-height:60vh}
 .badge{background:var(--navy);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:700}
@@ -65,37 +67,28 @@ td.kiri{text-align:left;font-weight:600}
   <main class="main">
     <section id="status" class="page active">
       <div class="card">
-        <h3>📊 Status Kirim Laporan BOSP SMA 2026</h3>
+        <div class="card-header">
+          <h3>📊 Status Kirim Laporan BOSP SMA 2026</h3>
+          <div class="clock">
+            <div id="jam">00:00:00</div>
+            <div id="tanggal">Senin, 5 Mei 2026</div>
+          </div>
+        </div>
         <p class="sub">Total Sekolah: <span class="badge" id="totalSekolah">0</span></p>
 
         <div class="stats-grid">
-          <div class="stat-card stat-total">
-            <div class="angka" id="statTotal">0</div>
-            <div class="label">Total Sekolah</div>
-          </div>
-          <div class="stat-card stat-sudah">
-            <div class="angka" id="statSudah">0</div>
-            <div class="label">Sudah Kirim</div>
-          </div>
-          <div class="stat-card stat-belum">
-            <div class="angka" id="statBelum">0</div>
-            <div class="label">Belum Kirim</div>
-          </div>
-          <div class="stat-card stat-persen">
-            <div class="angka" id="statPersen">0%</div>
-            <div class="label">Progress Kirim</div>
-          </div>
+          <div class="stat-card stat-total"><div class="angka" id="statTotal">0</div><div class="label">Total Sekolah</div></div>
+          <div class="stat-card stat-sudah"><div class="angka" id="statSudah">0</div><div class="label">Sudah Kirim</div></div>
+          <div class="stat-card stat-belum"><div class="angka" id="statBelum">0</div><div class="label">Belum Kirim</div></div>
+          <div class="stat-card stat-persen"><div class="angka" id="statPersen">0%</div><div class="label">Progress Kirim</div></div>
         </div>
 
         <div class="table-wrap">
           <table id="tabelStatus">
             <thead>
               <tr>
-                <th>No</th>
-                <th class="kiri">NPSN</th>
-                <th class="kiri" style="min-width:180px">Nama Sekolah</th>
-                <th>Status</th>
-                <th class="kiri">Kabupaten</th>
+                <th>No</th><th class="kiri">NPSN</th><th class="kiri" style="min-width:180px">Nama Sekolah</th>
+                <th>Status</th><th class="kiri">Kabupaten</th>
                 <th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th>
                 <th>Status Kirim WA</th>
               </tr>
@@ -115,29 +108,45 @@ td.kiri{text-align:left;font-weight:600}
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNn0ZAz-vXzFtyT2PTWH05V-RjZtHI4AK3VfOhqOc0bAxo2X_kp21i96tBBjMs04_XWs_0-Sa_nCSc/pub?gid=147011660&single=true&output=csv";
 let dataSekolah = [];
 
+// Jam Digital
+function updateClock(){
+  const now=new Date();
+  document.getElementById('jam').textContent=now.toLocaleTimeString('id-ID');
+  document.getElementById('tanggal').textContent=now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+setInterval(updateClock,1000);updateClock();
+
 document.querySelectorAll('.menu a').forEach(a=>{a.onclick=e=>{e.preventDefault();document.querySelectorAll('.menu a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(a.dataset.page).classList.add('active');}});
 
 const clean=(s)=>s.toLowerCase().replace(/^[a-z]\./,'').trim();
+
+// PARSER CSV BENERAN. Tahan koma di dalam ""
+function parseCSV(text){
+  const rows=[];let row=[],cell='',inQuote=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(c=='"'){if(inQuote&&n=='"'){cell+='"';i++}else inQuote=!inQuote}
+    else if(c==','&&!inQuote){row.push(cell);cell=''}
+    else if(c=='\n'&&!inQuote){row.push(cell);rows.push(row);row=[];cell=''}
+    else{cell+=c}
+  }
+  if(cell||row.length){row.push(cell);rows.push(row)}
+  return rows;
+}
 
 async function loadData(){
   if(dataSekolah.length>0)return;
   try{
     const res=await fetch(CSV_URL+'&t='+Date.now());
     const txt=await res.text();
-    const rows=txt.trim().split('\n').map(r=>r.split(','));
+    const rows=parseCSV(txt.trim()); // Pake parser beneran
     const header=rows[0].map(clean);
 
-    const iNo=header.indexOf('no');
-    const iNPSN=header.indexOf('npsn');
-    const iNama=header.indexOf('nama sekolah');
-    const iStatus=header.indexOf('status');
-    const iKab=header.indexOf('kabupaten');
-    const iWa=header.indexOf('status kirim');
-    const bulan={
-      jan:header.indexOf('januari'),feb:header.indexOf('februari'),mar:header.indexOf('maret'),apr:header.indexOf('april'),
-      mei:header.indexOf('mei'),jun:header.indexOf('juni'),jul:header.indexOf('juli'),agt:header.indexOf('agustus'),
-      sep:header.indexOf('september'),okt:header.indexOf('oktober'),nov:header.indexOf('nopember'),des:header.indexOf('desember')
-    };
+    const iNo=header.indexOf('no');const iNPSN=header.indexOf('npsn');const iNama=header.indexOf('nama sekolah');
+    const iStatus=header.indexOf('status');const iKab=header.indexOf('kabupaten');const iWa=header.indexOf('status kirim');
+    const bulan={jan:header.indexOf('januari'),feb:header.indexOf('februari'),mar:header.indexOf('maret'),apr:header.indexOf('april'),
+    mei:header.indexOf('mei'),jun:header.indexOf('juni'),jul:header.indexOf('juli'),agt:header.indexOf('agustus'),
+    sep:header.indexOf('september'),okt:header.indexOf('oktober'),nov:header.indexOf('nopember'),des:header.indexOf('desember')};
 
     dataSekolah=rows.slice(1).filter(r=>r[iNPSN]).map(r=>({
       no:r[iNo]?.trim()||'',npsn:r[iNPSN]?.trim()||'-',nama:r[iNama]?.trim()||'-',status:r[iStatus]?.trim()||'',
@@ -149,15 +158,14 @@ async function loadData(){
     renderTabel();
   }catch(e){
     console.error(e);
-    document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="18" style="color:red">❌ Gagal load data</td></tr>`
+    document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="18" style="color:red">❌ Gagal load data. Cek console F12</td></tr>`
   }
 }
 
 function renderTabel(){
   const total=dataSekolah.length;
   const sudah=dataSekolah.filter(s=>['jan','feb','mar','apr','mei','jun','jul','agt','sep','okt','nov','des'].every(m=>s[m])).length;
-  const belum=total-sudah;
-  const persen=total>0?((sudah/total)*100).toFixed(1):0;
+  const belum=total-sudah;const persen=total>0?((sudah/total)*100).toFixed(1):0;
 
   document.getElementById('totalSekolah').textContent=total;
   document.getElementById('statTotal').textContent=total;
@@ -168,9 +176,7 @@ function renderTabel(){
   const body=document.querySelector('#tabelStatus tbody');
   body.innerHTML=dataSekolah.map(s=>`
     <tr>
-      <td>${s.no}</td>
-      <td class="kiri">${s.npsn}</td>
-      <td class="kiri">${s.nama}</td>
+      <td>${s.no}</td><td class="kiri">${s.npsn}</td><td class="kiri">${s.nama}</td>
       <td><span class="status-badge ${s.status.toLowerCase().includes('aktif')?'status-aktif':'status-tidak'}">${s.status||'-'}</span></td>
       <td class="kiri">${s.kab}</td>
       ${['jan','feb','mar','apr','mei','jun','jul','agt','sep','okt','nov','des'].map(m=>`<td>${s[m]?'<span class="ok">✓</span>':'<span class="kosong">○</span>'}</td>`).join('')}
