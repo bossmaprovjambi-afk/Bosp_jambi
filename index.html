@@ -5,45 +5,68 @@
 <link rel="icon" href="favicon.ico">
 <title>Dashboard BOSP SMA Jambi 2026</title>
 <style>
-  :root{--navy:#0A2947;--beige:#F5EADF;--sage:#D1D7C5;--hijau:#16a34a;--merah:#dc2626;--biru:#2563eb;}
-  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
-  body{display:flex;min-height:100vh;background:#f8f9fa;color:#1e293b}
-.sidebar{width:270px;background:#fff;border-right:1px solid var(--sage);padding:24px 20px;display:flex;flex-direction:column;gap:14px;flex-shrink:0;height:100vh;position:sticky;top:0}
-.sidebar.logo{display:flex;flex-direction:column;align-items:center;gap:12px;padding-bottom:20px;border-bottom:1px solid var(--sage);text-align:center}
-.sidebar.logo img{width:48px;height:48px;object-fit:contain}
-.sidebar.logo h2{font-size:15px;font-weight:800;line-height:1.3;color:var(--navy)}
-.sidebar.logo p{font-size:12px;font-weight:400;color:#475569}
-.menu{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:12px}
-.menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:#475569;font-weight:600;font-size:14px}
-.menu a.active{background:var(--navy);color:#fff}
-.main{flex:1;padding:28px;overflow-y:auto;background:#fff}
-.page{display:none}.page.active{display:block}
-.card{background:#fff;border:1px solid var(--sage);border-radius:18px;padding:24px;box-shadow:0 4px 12px rgba(0,0,0,.04)}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:10px}
-.card h3{font-size:18px;font-weight:800;color:var(--navy)}
-.clock{font-size:12px;color:#64748b;font-weight:600;text-align:right}
-.clock #jam{font-size:16px;font-weight:800;color:var(--navy)}
-.card p.sub{color:#64748b;font-size:14px;margin-bottom:18px}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
-.stat-card{border:1px solid var(--sage);border-radius:14px;padding:16px;text-align:center;background:#fff}
-.stat-card.angka{font-size:28px;font-weight:800;margin-bottom:4px}
-.stat-card.label{font-size:12px;color:#64748b;font-weight:600}
-.stat-total{border-color:var(--navy);background:var(--navy);color:#fff}.stat-total.label{color:#fff}
-.stat-sudah{border-color:var(--hijau);color:var(--hijau)}
-.stat-belum{border-color:var(--merah);color:var(--merah)}
-.stat-persen{border-color:var(--biru);color:var(--biru)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{border:1px solid var(--sage);padding:8px 6px;text-align:center;white-space:nowrap}
-th{background:var(--beige);position:sticky;top:0;color:var(--navy);font-weight:800}
-td.kiri{text-align:left;font-weight:600}
-.ok{color:var(--hijau);font-weight:700;font-size:15px}
-.kosong{color:#cbd5e1;font-size:15px}
-.status-badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;color:#fff}
-.status-aktif{background:var(--hijau)}.status-tidak{background:var(--merah)}
-.wa-badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;background:var(--navy);color:#fff}
-.table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--sage);border-radius:14px;max-height:60vh}
-.badge{background:var(--navy);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:700}
-@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+  :root{
+    --navy:#0A2947;--beige:#F5EADF;--sage:#D1D7C5;--hijau:#10b981;--merah:#ef4444;--biru:#3b82f6;
+    --bg:#f4f7f9;--card:#ffffff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--shadow:0 4px 20px rgba(0,0,0,.06);
+  }
+  [data-theme="dark"]{
+    --bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--muted:#94a3b8;--border:#334155;--shadow:0 4px 20px rgba(0,0,0,.4);
+    --beige:#334155;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins','Segoe UI',sans-serif;transition:background.3s,color.3s,border.3s}
+  body{display:flex;min-height:100vh;background:var(--bg);color:var(--text)}
+  
+ .sidebar{width:260px;background:var(--card);border-right:1px solid var(--border);padding:24px 20px;display:flex;flex-direction:column;gap:14px;flex-shrink:0;height:100vh;position:sticky;top:0}
+ .sidebar.logo{display:flex;flex-direction:column;align-items:center;gap:12px;padding-bottom:20px;border-bottom:1px solid var(--border);text-align:center}
+ .sidebar.logo img{width:52px;height:52px;object-fit:contain}
+ .sidebar.logo h2{font-size:15px;font-weight:700;line-height:1.3;color:var(--navy)}
+  [data-theme="dark"].sidebar.logo h2{color:var(--text)}
+ .sidebar.logo p{font-size:12px;font-weight:400;color:var(--muted)}
+ .menu{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:12px}
+ .menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px}
+ .menu a:hover{background:var(--border)}
+ .menu a.active{background:var(--navy);color:#fff}
+  [data-theme="dark"].menu a.active{background:var(--biru)}
+
+ .main{flex:1;padding:28px;overflow-y:auto}
+ .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+ .topbar h1{font-size:22px;font-weight:700;color:var(--text)}
+ .theme-toggle{width:48px;height:26px;background:var(--border);border-radius:20px;position:relative;cursor:pointer;border:none}
+ .theme-toggle span{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left.3s}
+  [data-theme="dark"].theme-toggle span{left:25px;background:var(--navy)}
+
+ .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+ .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:10px}
+ .card h3{font-size:18px;font-weight:700;color:var(--text)}
+ .clock{font-size:12px;color:var(--muted);font-weight:600;text-align:right}
+ .clock #jam{font-size:16px;font-weight:700;color:var(--text)}
+ .card p.sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+
+ .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+ .stat-card{border:1px solid var(--border);border-radius:16px;padding:18px;text-align:left;background:var(--card)}
+ .stat-card.label{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
+ .stat-card.angka{font-size:30px;font-weight:800;margin-bottom:2px}
+ .stat-total.angka{color:var(--navy)}[data-theme="dark"].stat-total.angka{color:var(--biru)}
+ .stat-sudah.angka{color:var(--hijau)}
+ .stat-belum.angka{color:var(--merah)}
+ .stat-persen.angka{color:var(--biru)}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border-bottom:1px solid var(--border);padding:12px 8px;text-align:center;white-space:nowrap}
+  th{background:var(--beige);position:sticky;top:0;color:var(--text);font-weight:700}
+  td.kiri{text-align:left;font-weight:600}
+  tr:hover td{background:var(--bg)}
+ .ok{color:var(--hijau);font-weight:700;font-size:16px}
+ .kosong{color:var(--border);font-size:16px}
+ .status-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;color:#fff}
+ .status-aktif{background:var(--hijau)}.status-tidak{background:var(--merah)}
+ .wa-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:var(--navy);color:#fff}
+  [data-theme="dark"].wa-badge{background:var(--biru)}
+ .table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--border);border-radius:16px;max-height:60vh}
+ .badge{background:var(--navy);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:700}
+  [data-theme="dark"].badge{background:var(--biru)}
+ .page{display:none}.page.active{display:block}
+  @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.sidebar{display:none}.main{padding:16px}}
 </style>
 </head>
 <body>
@@ -62,6 +85,10 @@ td.kiri{text-align:left;font-weight:600}
     </ul>
   </aside>
   <main class="main">
+    <div class="topbar">
+      <h1>Dashboard BOSP 2026</h1>
+      <button class="theme-toggle" id="themeBtn"><span></span></button>
+    </div>
     <section id="status" class="page active">
       <div class="card">
         <div class="card-header">
@@ -70,14 +97,14 @@ td.kiri{text-align:left;font-weight:600}
         </div>
         <p class="sub">Total Sekolah: <span class="badge" id="totalSekolah">0</span></p>
         <div class="stats-grid">
-          <div class="stat-card stat-total"><div class="angka" id="statTotal">0</div><div class="label">Total Sekolah</div></div>
-          <div class="stat-card stat-sudah"><div class="angka" id="statSudah">0</div><div class="label">Sudah Kirim</div></div>
-          <div class="stat-card stat-belum"><div class="angka" id="statBelum">0</div><div class="label">Belum Kirim</div></div>
-          <div class="stat-card stat-persen"><div class="angka" id="statPersen">0%</div><div class="label">Progress Kirim</div></div>
+          <div class="stat-card stat-total"><div class="label">Total Sekolah</div><div class="angka" id="statTotal">0</div></div>
+          <div class="stat-card stat-sudah"><div class="label">Sudah Kirim</div><div class="angka" id="statSudah">0</div></div>
+          <div class="stat-card stat-belum"><div class="label">Belum Kirim</div><div class="angka" id="statBelum">0</div></div>
+          <div class="stat-card stat-persen"><div class="label">Progress Kirim</div><div class="angka" id="statPersen">0%</div></div>
         </div>
         <div class="table-wrap">
           <table id="tabelStatus">
-            <thead><tr><th>No</th><th class="kiri">NPSN</th><th class="kiri" style="min-width:180px">Nama Sekolah</th><th>Status</th><th class="kiri">Kabupaten</th><th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th><th>Status Kirim WA</th></tr></thead>
+            <thead><tr><th>No</th><th class="kiri">NPSN</th><th class="kiri" style="min-width:180px">Nama Sekolah</th><th>Status</th><th class="kiri">Kabupaten</th><th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th><th>WA</th></tr></thead>
             <tbody><tr><td colspan="18">⏳ Loading...</td></tr></tbody>
           </table>
         </div>
@@ -90,8 +117,14 @@ td.kiri{text-align:left;font-weight:600}
     <section id="belanja" class="page"><div class="card"><h3>💰 Belanja</h3></div></section>
   </main>
 <script>
-const CSV_URL = "https://script.google.com/macros/s/AKfycbwMxmNRScZrparzArqIHwDS1GOJ08PoqbqmNgFdEU1L_A_ycR7HIGUA7Ics2BUjIGcD3w/exec"; // LINK LU UDAH GUE PASANG
+const CSV_URL = "https://script.google.com/macros/s/AKfycbwMxmNRScZrparzArqIHwDS1GOJ08PoqbqmNgFdEU1L_A_ycR7HIGUA7Ics2BUjIGcD3w/exec";
 let dataSekolah = [];
+
+// THEME TOGGLE
+const btn=document.getElementById('themeBtn');
+const saved=localStorage.getItem('theme')||'light';
+document.documentElement.setAttribute('data-theme',saved);
+btn.onclick=()=>{const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',t);localStorage.setItem('theme',t);}
 
 function updateClock(){const now=new Date();document.getElementById('jam').textContent=now.toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta'});document.getElementById('tanggal').textContent=now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Jakarta'});}
 setInterval(updateClock,1000);updateClock();
@@ -111,7 +144,7 @@ async function loadData(){
     renderTabel();
   }catch(e){
     console.error('ERROR:',e);
-    document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="18" style="color:red">❌ Gagal load. Cek Apps Script: Permission Anyone?</td></tr>`
+    document.querySelector('#tabelStatus tbody').innerHTML=`<tr><td colspan="18" style="color:var(--merah)">❌ Gagal load. Cek Apps Script: Permission Anyone?</td></tr>`
   }
 }
 
