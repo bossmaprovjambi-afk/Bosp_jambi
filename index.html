@@ -5,48 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard BOSP SMA Jambi 2026</title>
 <style>
-  :root{--biru:#1d4ed8;--biru-hover:#1e40af;--abu:#f1f5f9;--border:#e2e8f0;--teks:#1e293b;--hijau:#16a34a;--hijau-hover:#15803d;}
+  :root{
+    --navy:#0A2947; /* Biru tua lembut - Header, Menu Aktif */
+    --beige:#F5EADF; /* Krem lembut - Hover, Background aksen */
+    --sage:#D1D7C5; /* Hijau sage - Border, tabel */
+    --coklat:#8B5A2B; /* Coklat - Tombol Utama */
+    --coklat-hover:#6f4822;
+    --abu:#f8f9fa; /* Background utama */
+    --border:#e5e7eb;
+    --teks:#1e293b;
+  }
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
   body{display:flex;min-height:100vh;background:var(--abu);color:var(--teks)}
-  /* SIDEBAR PUTIH */
+  /* SIDEBAR PUTIH ELEGAN */
 .sidebar{width:270px;background:#fff;border-right:1px solid var(--border);padding:24px;display:flex;flex-direction:column;gap:14px;flex-shrink:0;height:100vh;position:sticky;top:0}
-.sidebar.logo{display:flex;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--border)}
-.sidebar.logo img{width:52px;height:52px;object-fit:contain;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.15)} /* LOGO 3D + SHADOW */
-.sidebar.logo h2{font-size:16px;font-weight:800;line-height:1.3}
+.sidebar.logo{display:flex;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--sage)}
+.sidebar.logo img{width:52px;height:52px;object-fit:contain;border-radius:12px;box-shadow:0 4px 12px rgba(10,41,71,.18)} /* LOGO SHADOW NAVY */
+.sidebar.logo h2{font-size:16px;font-weight:800;line-height:1.3;color:var(--navy)}
 .menu{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px;overflow-y:auto}
 .menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:#475569;font-weight:600;font-size:14px;transition:.2s}
-.menu a:hover{background:var(--abu);transform:translateX(4px)}
-.menu a.active{background:var(--biru);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.35);transform:translateX(0)}
+.menu a:hover{background:var(--beige);color:var(--navy);transform:translateX(4px)}
+.menu a.active{background:var(--navy);color:#fff;box-shadow:0 6px 16px rgba(10,41,71,.25);transform:translateX(0)}
   /* KONTEN PUTIH */
 .main{flex:1;padding:28px;overflow-y:auto;background:#fff}
 .page{display:none}
 .page.active{display:block;animation:fade.3s}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
-.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:0 6px 24px rgba(0,0,0,.06)}
-.card h3{font-size:18px;margin-bottom:18px;font-weight:800;display:flex;align-items:center;gap:8px}
+.card{background:#fff;border:1px solid var(--sage);border-radius:18px;padding:24px;box-shadow:0 6px 24px rgba(10,41,71,.05)}
+.card h3{font-size:18px;margin-bottom:18px;font-weight:800;display:flex;align-items:center;gap:8px;color:var(--navy)}
   /* FORM CETAK */
 .form-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;align-items:end}
-  input,select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;background:#fff;transition:.2s}
-  input:focus,select:focus{outline:none;border-color:var(--biru);box-shadow:0 0 0 3px rgba(29,78,216,.1)}
-  /* TOMBOL PROFESIONAL 3D */
- .btn-primary{
-    background:linear-gradient(180deg,var(--hijau),var(--hijau-hover));
+  input,select{width:100%;padding:12px 14px;border:1.5px solid var(--sage);border-radius:12px;font-size:14px;background:#fff;transition:.2s}
+  input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(10,41,71,.1)}
+  /* TOMBOL COKLAT LEMBUT 3D */
+.btn-primary{
+    background:linear-gradient(180deg,var(--coklat),var(--coklat-hover));
     color:#fff;border:none;padding:12px 22px;border-radius:12px;
     font-weight:800;cursor:pointer;transition:.2s all;
-    box-shadow:0 4px 0 var(--hijau-hover), 0 6px 14px rgba(22,163,74,.3);
+    box-shadow:0 4px 0 var(--coklat-hover), 0 6px 14px rgba(139,90,43,.25);
     display:inline-flex;align-items:center;gap:8px
   }
- .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--hijau-hover), 0 10px 20px rgba(22,163,74,.35)}
- .btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--hijau-hover)}
- .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:0 4px 0 var(--hijau-hover)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--coklat-hover), 0 10px 20px rgba(139,90,43,.3)}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--coklat-hover)}
   /* TABEL DASHBOARD */
   table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{border:1px solid var(--border);padding:12px 8px;text-align:center;white-space:nowrap}
-  th{background:var(--abu);position:sticky;top:0;z-index:1;font-weight:800}
+  th,td{border:1px solid var(--sage);padding:12px 8px;text-align:center;white-space:nowrap}
+  th{background:var(--beige);position:sticky;top:0;z-index:1;font-weight:800;color:var(--navy)}
   td.kiri{text-align:left;font-weight:600}
-.ok{color:var(--hijau);font-weight:700;font-size:16px}
+.ok{color:var(--coklat);font-weight:700;font-size:16px}
 .kosong{color:#94a3b8;font-size:14px}
-.table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--border);border-radius:14px}
+.table-wrap{overflow-x:auto;margin-top:18px;border:1px solid var(--sage);border-radius:14px}
   @media(max-width:900px){body{flex-direction:column}.sidebar{width:100%;height:auto;position:relative}.menu{flex-direction:row;overflow-x:auto}.main{padding:18px}}
 </style>
 </head>
@@ -55,7 +63,7 @@
   <!-- SIDEBAR + LOGO 3D -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="attachment://0" alt="Logo Sepucuk Jambi"> <!-- LOGO LU YANG BARU -->
+      <img src="attachment://0" alt="Logo Sepucuk Jambi">
       <h2>Dinas Pendidikan<br>Jambi</h2>
     </div>
     <ul class="menu">
@@ -89,7 +97,7 @@
         <div class="form-grid">
           <div><label style="font-weight:600;font-size:13px;margin-bottom:6px;display:block">NPSN</label><input id="npsnBku" placeholder="Masukkan NPSN"></div>
           <div><label style="font-weight:600;font-size:13px;margin-bottom:6px;display:block">Bulan</label><select id="bulanBku"><option value="">Pilih Bulan</option><option value="JAN26">Januari</option><option value="FEB26">Februari</option><option value="MAR26">Maret</option><option value="APR26">April</option><option value="MEI26">Mei</option><option value="JUN26">Juni</option><option value="JUL26">Juli</option><option value="AGT26">Agustus</option><option value="SEP26">September</option><option value="OKT26">Oktober</option><option value="NOV26">November</option><option value="DES26">Desember</option></select></div>
-          <button class="btn-primary" id="btnCetak">🔍 CEK & CETAK</button> <!-- TOMBOL BARU -->
+          <button class="btn-primary" id="btnCetak">🔍 CEK & CETAK</button>
         </div>
         <p id="infoBku" style="margin-top:14px;font-size:13px;color:#64748b"></p>
       </div>
