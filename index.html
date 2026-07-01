@@ -13,32 +13,45 @@
  .sidebar.logo{text-align:center;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:12px}
  .sidebar.logo img{width:56px;height:56px;border-radius:12px}
  .sidebar.logo h2{font-size:15px;font-weight:700}
+ .sidebar.logo p{font-size:12px;color:var(--muted)}
  .menu{list-style:none;display:flex;flex-direction:column;gap:4px}
- .menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600}
+ .menu a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px}
  .menu a.active{background:var(--navy);color:#fff}
  .main{flex:1;padding:28px;overflow-y:auto}
  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+ .topbar h1{font-size:24px;font-weight:700}
  .theme-toggle{width:52px;height:28px;background:var(--border);border-radius:20px;position:relative;border:none;cursor:pointer}
  .theme-toggle span{position:absolute;top:4px;left:4px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left.3s}
   [data-theme=dark].theme-toggle span{left:28px}
  .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px}
+ .card h3{font-size:18px;font-weight:700;margin-bottom:4px}
+ .card p.sub{color:var(--muted);font-size:14px;margin-bottom:20px}
  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0}
  .stat-card{border:1px solid var(--border);border-radius:16px;padding:20px;background:var(--card)}
+ .stat-card.label{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:8px}
  .stat-card.angka{font-size:32px;font-weight:800}
  .filter-bar{margin-bottom:16px}
  .search-box{width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text)}
+ .search-box::placeholder{color:var(--muted)}
   table{width:100%;border-collapse:collapse;font-size:13px}
-  th{background:var(--border);padding:14px 10px;text-align:center;font-weight:700;font-size:11px}
+  thead{position:sticky;top:0;z-index:10}
+  th{background:var(--border);padding:14px 10px;text-align:center;font-weight:700;font-size:11px;text-transform:uppercase}
+  th.kiri{text-align:left}
   td{border-bottom:1px solid var(--border);padding:12px 8px;text-align:center}
-  td.kiri{text-align:left}
+  td.kiri{text-align:left;font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  .ok{color:var(--hijau);font-weight:800;font-size:18px}
  .kosong{color:var(--border);font-size:18px}
- .status-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;color:#fff}
+ .status-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;display:inline-block}
  .status-negeri{background:var(--hijau)}
  .status-swasta{background:var(--orange)}
- .wa-badge{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--navy);color:#fff}
+ .wa-badge{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--navy);color:#fff;display:flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap}
+  [data-theme=dark].wa-badge{background:#1e293b;border:1px solid var(--border)}
  .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:16px;background:var(--card)}
  .badge{background:var(--navy);color:#fff;padding:5px 12px;border-radius:8px;font-size:13px;font-weight:700}
+ .clock{text-align:right;margin-left:auto}
+ .clock #jam{font-size:18px;font-weight:700;color:var(--navy)}
+ .clock #tanggal{font-size:12px;color:var(--muted)}
+  @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.sidebar{display:none}.main{padding:16px}}
 </style>
 </head>
 <body>
@@ -50,27 +63,38 @@
     <ul class="menu">
       <li><a href="#" class="active">📊 Status Kirim</a></li>
       <li><a href="#">📄 Laporan BKU</a></li>
+      <li><a href="#">📘 Rkas Awal</a></li>
+      <li><a href="#">📈 Stats</a></li>
+      <li><a href="#">🗓️ Rekap</a></li>
+      <li><a href="#">💰 Belanja</a></li>
     </ul>
   </aside>
   <main class="main">
     <div class="topbar">
-      <h1>Dashboard BOSP 2026</h1>
-      <button class="theme-toggle" id="themeBtn"><span></span></button>
+      <div>
+        <h1>Dashboard BOSP 2026</h1>
+        <p style="color:var(--muted);font-size:13px">Status Kirim Laporan BOSP SMA 2026</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="clock"><div id="jam">00:00:00</div><div id="tanggal">Rabu, 1 Juli 2026</div></div>
+        <button class="theme-toggle" id="themeBtn"><span></span></button>
+      </div>
     </div>
     <div class="card">
-      <h3>📊 Status Kirim Laporan BOSP SMA 2026 <span class="badge" id="totalSekolah">0</span></h3>
+      <h3>📊 Status Kirim Laporan BOSP SMA 2026</h3>
+      <p class="sub">Total Sekolah: <span class="badge" id="totalSekolah">0</span></p>
       <div class="stats-grid">
-        <div class="stat-card"><div>Total Sekolah</div><div class="angka" id="statTotal">0</div></div>
-        <div class="stat-card"><div>Sudah Kirim</div><div class="angka" id="statSudah">0</div></div>
-        <div class="stat-card"><div>Belum Kirim</div><div class="angka" id="statBelum">0</div></div>
-        <div class="stat-card"><div>Progress</div><div class="angka" id="statPersen">0%</div></div>
+        <div class="stat-card"><div class="label">Total Sekolah</div><div class="angka" id="statTotal">0</div></div>
+        <div class="stat-card"><div class="label">Sudah Kirim</div><div class="angka" id="statSudah">0</div></div>
+        <div class="stat-card"><div class="label">Belum Kirim</div><div class="angka" id="statBelum">0</div></div>
+        <div class="stat-card"><div class="label">Progress Kirim</div><div class="angka" id="statPersen">0%</div></div>
       </div>
       <div class="filter-bar">
         <input type="text" class="search-box" id="searchInput" placeholder="🔍 Cari NPSN, Nama Sekolah, atau Kabupaten...">
       </div>
       <div class="table-wrap">
         <table id="tabelStatus">
-          <thead><tr><th>No</th><th class="kiri">NPSN</th><th class="kiri">Nama Sekolah</th><th>Status</th><th class="kiri">Kabupaten</th><th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th><th>WA</th></tr></thead>
+          <thead><tr><th>NO</th><th class="kiri">NPSN</th><th class="kiri">NAMA SEKOLAH</th><th>STATUS</th><th class="kiri">KABUPATEN</th><th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th><th>WA</th></tr></thead>
           <tbody><tr><td colspan="18">⏳ Loading...</td></tr></tbody>
         </table>
       </div>
@@ -80,6 +104,7 @@
 const CSV_URL="https://script.google.com/macros/s/AKfycbwMxmNRScZrparzArqIHwDS1GOJ08PoqbqmNgFdEU1L_A_ycR7HIGUA7Ics2BUjIGcD3w/exec";
 let dataSekolah=[],dataFiltered=[];
 
+// THEME
 document.getElementById('themeBtn').onclick=()=>{
   const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
   document.documentElement.setAttribute('data-theme',t);
@@ -87,17 +112,30 @@ document.getElementById('themeBtn').onclick=()=>{
 }
 document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'light');
 
-const clean=s=>String(s||'').toLowerCase().replace(/[^a-z]/g,'').trim();
+// JAM
+function updateClock(){
+  const n=new Date();
+  document.getElementById('jam').textContent=n.toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta'});
+  document.getElementById('tanggal').textContent=n.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Jakarta'});
+}
+setInterval(updateClock,1000);updateClock();
+
+const clean=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'').trim();
 
 async function loadData(){
   try{
     const res=await fetch(CSV_URL+'?t='+Date.now());
     const data=await res.json();
     const h=data[0].map(clean);
-    const iNo=h.indexOf('no'),iNPSN=h.indexOf('npsn'),iNama=h.indexOf('namasekolah'),
-          iStatus=h.indexOf('status'),iKab=h.indexOf('kabupaten')>-1?h.indexOf('kabupaten'):h.indexOf('kabkota'),
-          iWa=h.indexOf('statuskirim'),
-          b={jan:h.indexOf('januari'),feb:h.indexOf('februari'),mar:h.indexOf('maret'),apr:h.indexOf('april'),
+    
+    // FIX KABUPATEN: TERIMA KABUPATEN, KABKOTA, KABKOTA
+    const iNo=h.indexOf('no');
+    const iNPSN=h.indexOf('npsn');
+    const iNama=h.indexOf('namasekolah');
+    const iStatus=h.indexOf('status');
+    const iKab=h.indexOf('kabupaten')>-1?h.indexOf('kabupaten'):h.indexOf('kabkota')>-1?h.indexOf('kabkota'):h.indexOf('kabkot');
+    const iWa=h.indexOf('statuskirim');
+    const b={jan:h.indexOf('januari'),feb:h.indexOf('februari'),mar:h.indexOf('maret'),apr:h.indexOf('april'),
              mei:h.indexOf('mei'),jun:h.indexOf('juni'),jul:h.indexOf('juli'),agt:h.indexOf('agustus'),
              sep:h.indexOf('september'),okt:h.indexOf('oktober'),nov:h.indexOf('nopember'),des:h.indexOf('desember')};
 
@@ -106,7 +144,7 @@ async function loadData(){
       npsn:r[iNPSN]?.toString().trim()||'-',
       nama:r[iNama]?.toString().trim()||'-',
       status:r[iStatus]?.toString().trim()||'',
-      kab:iKab>-1?r[iKab].toString().trim():'-',
+      kab:iKab>-1?r.toString().trim():'-', // INI FIX UTAMA
       wa:r[iWa]?.toString().trim()||'-',
       jan:b.jan>-1?r[b.jan].toString().trim():'',feb:b.feb>-1?r[b.feb].toString().trim():'',
       mar:b.mar>-1?r[b.mar].toString().trim():'',apr:b.apr>-1?r[b.apr].toString().trim():'',
